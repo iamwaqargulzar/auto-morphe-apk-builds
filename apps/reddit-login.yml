@@ -5,10 +5,12 @@ enabled: true
 helperFor: reddit
 # Old enough to log in: patched Reddit fails Google Play Integrity at login.
 # Log in here, then install the current patched Reddit over it.
+# Login also fails unless the app sees Google Play as its installer, so
+# "Change installer source" (default: Google Play) is applied too.
 version: "2024.02.0"
 arches: [arm64-v8a, armeabi-v7a]
 exclusive: true
-include: ["Spoof signature"]
+include: ["Spoof signature", "Change installer source"]
 exclude: []
 about: >-
   Patched Reddit 2024.02.0 for logging in. Install it, log in with your
