@@ -1,0 +1,5 @@
+# Pakistani telecom apps (Jazz Simosa, My Zong) and a few others.
+name: Proxma
+patches:
+  repo: totsiaw/proxma-patches
+  asset: '^patches-.*\.mpp$'

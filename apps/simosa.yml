@@ -1,0 +1,12 @@
+name: Simosa (Jazz World)
+package: com.jazz.jazzworld
+source: proxma
+enabled: true
+order: 10
+version: auto
+arches: [arm64-v8a, armeabi-v7a]
+include: []
+exclude: []
+about: >-
+  Jazz's Simosa app without ads or trackers and without the Shop, Social+ and
+  Lifestyle tabs, with the daily check-in reward claimed for you.

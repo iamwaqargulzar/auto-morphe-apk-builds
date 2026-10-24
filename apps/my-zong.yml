@@ -1,0 +1,12 @@
+name: My Zong
+package: com.zong.customercare
+source: proxma
+enabled: true
+order: 11
+version: auto
+arches: [arm64-v8a, armeabi-v7a]
+include: []
+exclude: []
+about: >-
+  My Zong without ads or trackers, and the daily reward claims without
+  watching an ad.
