@@ -136,7 +136,7 @@ section { padding: 96px 0; position: relative; }
 .hero { padding: 72px 0 40px; }
 .hero-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 48px; align-items: center; }
 @media (max-width: 920px) { .hero-grid { grid-template-columns: 1fr; } .phone-wrap { order: 2; } }
-.hero h1 { margin: 22px 0 22px; }
+.hero h1 { margin: 22px 0 22px; font-size: clamp(42px, 5.4vw, 74px); }
 .hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
 .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 44px; max-width: 620px; }
 @media (max-width: 560px) { .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
@@ -166,7 +166,7 @@ section { padding: 96px 0; position: relative; }
 .screen .row img { width: 36px; height: 36px; border-radius: 10px; }
 .screen .row .t { flex: 1; min-width: 0; }
 .screen .row .t b { font-size: 12.5px; display: block; }
-.screen .row .t span { font-size: 10px; color: #9a9aad; }
+.screen .row .t span { font-size: 10px; color: #9a9aad; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .screen .pill { font-size: 9.5px; font-weight: 700; border-radius: 999px; padding: 4px 8px; }
 .pill-ok { color: #4ade80; background: rgba(74, 222, 128, 0.14); }
 .pill-up { color: #a5b4fc; background: rgba(129, 140, 248, 0.18); }
