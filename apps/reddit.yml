@@ -2,6 +2,7 @@ name: Reddit
 package: com.reddit.frontpage
 source: morphe
 enabled: true
+order: 2
 # "auto" picks the newest version the patches fully support.
 version: auto
 # Reddit patches mark recent versions experimental; the stable ones are too

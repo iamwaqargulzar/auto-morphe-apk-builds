@@ -4,7 +4,7 @@ import Downloads from "../components/Downloads.astro";
 import { appUrl, catalog, day, lastBuild, microgUrl, project, repoUrl, requestUrl } from "../lib";
 
 const apps = catalog.apps;
-const names = apps.map((a) => a.name).join(", ");
+const names = new Intl.ListFormat("en", { type: "conjunction" }).format(apps.map((a) => a.name));
 const title = `${project.name}: patched ${names} APKs, rebuilt automatically`;
 const description = `Free patched Android APKs for ${names}, built daily from the official Google Play app with community patches, signed with one stable key and installable with auto-updates via Obtainium.`;
 

@@ -164,7 +164,7 @@ function obtainiumLink(o: ObtainiumApp): string {
 }
 
 export async function buildCatalog(): Promise<Catalog> {
-  const apps = (await loadApps()).filter((a) => a.enabled);
+  const apps = (await loadApps()).filter((a) => a.enabled).sort((a, b) => a.order - b.order || a.name.localeCompare(b.name));
   const releases = await allReleases();
   const out: CatalogApp[] = [];
   for (const app of apps) {

@@ -2,6 +2,7 @@ name: YouTube
 package: com.google.android.youtube
 source: morphe
 enabled: true
+order: 1
 # "auto" picks the newest version the patches fully support.
 version: auto
 # CPU types to build; the first is required, the others are skipped with a

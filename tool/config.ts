@@ -40,6 +40,8 @@ const AppSchema = z.object({
   arches: z.array(z.enum(ARCHES)).min(1).default([...ARCHES]),
   include: z.array(z.string()).default([]),
   exclude: z.array(z.string()).default([]),
+  // Position on the portal (lower first).
+  order: z.number().default(100),
   // Portal text: one or two sentences on what the patched build changes.
   about: z.string().default(""),
   // Needs MicroG-RE to sign in with a Google account (YouTube, YouTube Music).

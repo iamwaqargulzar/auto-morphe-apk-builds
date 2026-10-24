@@ -76,7 +76,7 @@ const canonical = new URL(path, project.site).toString();
       h3 { font-size: 18px; margin: 0 0 6px; }
       .lead { font-size: 18px; color: var(--muted); max-width: 680px; margin: 0; }
       .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; }
-      .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+      .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr)); }
       .btn {
         display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 10px;
         background: var(--accent); color: var(--accent-text); text-decoration: none; font-weight: 600; font-size: 15px;
