@@ -1,0 +1,9 @@
+node_modules/
+.cache/
+out/
+*.keystore
+*.jks
+*.p12
+*.apk
+*.apks
+.env

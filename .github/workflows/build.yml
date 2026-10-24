@@ -1,0 +1,75 @@
+name: Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      app:
+        description: "App id to build (empty = all enabled apps)"
+        required: false
+        default: ""
+      force:
+        description: "Rebuild even if the release already exists"
+        type: boolean
+        default: false
+  schedule:
+    - cron: "0 2 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build
+  cancel-in-progress: false
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - id: plan
+        run: echo "matrix=$(npm run -s apkb -- plan ${APP:+--app "$APP"})" >> "$GITHUB_OUTPUT"
+        env:
+          APP: ${{ inputs.app }}
+
+  build:
+    needs: plan
+    if: ${{ needs.plan.outputs.matrix != '{"app":[]}' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    name: build (${{ matrix.app }})
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: astral-sh/setup-uv@v6
+      - uses: actions/cache@v4
+        with:
+          path: .cache/tools
+          key: tools-${{ github.run_id }}
+          restore-keys: tools-
+      - run: npm ci
+      - name: Build ${{ matrix.app }}
+        run: npm run -s apkb -- build "${{ matrix.app }}" ${FORCE:+--force}
+        env:
+          FORCE: ${{ inputs.force && '1' || '' }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          KEYSTORE_B64: ${{ secrets.KEYSTORE_B64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}

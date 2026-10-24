@@ -1,0 +1,5 @@
+# Official Morphe patches.
+name: Morphe
+patches:
+  repo: MorpheApp/morphe-patches
+  asset: '^patches-.*\.mpp$'

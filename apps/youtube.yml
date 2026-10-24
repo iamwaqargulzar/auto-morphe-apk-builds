@@ -1,0 +1,10 @@
+name: YouTube
+package: com.google.android.youtube
+source: morphe
+enabled: true
+# "auto" picks the newest version the patches fully support.
+version: auto
+arch: arm64-v8a
+# Patch names to force on / off (empty = patch bundle defaults).
+include: []
+exclude: []
