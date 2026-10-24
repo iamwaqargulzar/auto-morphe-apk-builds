@@ -40,15 +40,24 @@ export async function runOk(cmd: string, args: string[], opts: { quiet?: boolean
 
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-/** Retry with exponential backoff: delays of base, 2*base, 4*base... */
-export async function retry<T>(label: string, attempts: number, baseMs: number, fn: (attempt: number) => Promise<T>): Promise<T> {
+/**
+ * Retry with exponential backoff: delays of base, 2*base, 4*base...
+ * Errors matching `fatal` are rethrown at once (e.g. bad credentials).
+ */
+export async function retry<T>(
+  label: string,
+  attempts: number,
+  baseMs: number,
+  fn: (attempt: number) => Promise<T>,
+  fatal?: RegExp,
+): Promise<T> {
   let lastErr: unknown;
   for (let i = 1; i <= attempts; i++) {
     try {
       return await fn(i);
     } catch (err) {
       lastErr = err;
-      if (i === attempts) break;
+      if (i === attempts || fatal?.test((err as Error).message)) break;
       const wait = baseMs * 2 ** (i - 1);
       log(`${label}: attempt ${i}/${attempts} failed (${(err as Error).message.split("\n")[0]}); retrying in ${wait / 1000}s`);
       await sleep(wait);

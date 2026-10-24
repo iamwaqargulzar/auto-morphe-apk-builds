@@ -7,6 +7,9 @@ import { lookupVersionCode, recordVersionCode } from "./versioncodes.ts";
 // Google Play downloader (anonymous token via goopdl), pinned for reproducibility.
 const GOOPDL = process.env.GOOPDL ?? "goopdl@1.2.2";
 
+// Credential problems won't fix themselves; don't spend minutes retrying them.
+const AUTH_FATAL = /BadAuthentication|Missing required environment variable|must start with aas_et/;
+
 // goopdl device type per CPU type.
 const DEVICE: Record<Arch, string> = {
   "arm64-v8a": "arm64",
@@ -20,7 +23,7 @@ export async function playLatest(app: App, arch: Arch): Promise<{ version: strin
     const m = res.stdout.match(/Version\s*│\s*(\S+)\s+\((\d+)\)/);
     if (!m) throw new Error(`Could not read version from goopdl info output`);
     return { version: m[1]!, code: Number(m[2]) };
-  });
+  }, AUTH_FATAL);
 }
 
 /** Version code for `version`: from our map, or from Play if it is the current version. */
@@ -57,7 +60,7 @@ export async function downloadFromPlay(app: App, arch: Arch, version: string, wo
       "--splits", "--no-extras",
       "-o", dlDir,
     ], { quiet: true });
-  });
+  }, AUTH_FATAL);
 
   const files = (await readdir(dlDir)).filter((f) => f.endsWith(".apk")).sort();
   const base = files.find((f) => !f.includes("-config.") && !f.includes("-split"));
