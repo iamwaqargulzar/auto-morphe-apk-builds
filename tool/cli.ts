@@ -3,9 +3,11 @@ import { join } from "node:path";
 import { parseArgs } from "node:util";
 import { ROOT, loadApp, loadApps, loadSource, type App, type Arch } from "./config.ts";
 import { fetchTools, patch, supportedVersions, type Signing, type Tools } from "./morphe.ts";
+import { writeCatalog } from "./catalog.ts";
 import { downloadFromPlay } from "./play.ts";
 import { deleteRelease, publishRelease, releaseExists, releaseTag, type Build } from "./release.ts";
 import { log } from "./util.ts";
+import { mergeVersionCodes } from "./versioncodes.ts";
 
 const USAGE = `Usage:
   apkb plan [--app <id>]               print enabled apps as a JSON build matrix
@@ -13,7 +15,9 @@ const USAGE = `Usage:
     --force                            rebuild even if the release already exists
     --no-release                       only produce the APK in out/
     --repo <owner/name>                target repo (default: $GITHUB_REPOSITORY)
-  apkb versions <app>                  list versions the patches support`;
+  apkb versions <app>                  list versions the patches support
+  apkb catalog                         write the portal's data (site/src/data/catalog.json)
+  apkb merge-codes <files...>          merge version-codes.json files into state/`;
 
 async function signingFromEnv(): Promise<Signing> {
   let keystore = process.env.KEYSTORE_PATH;
@@ -31,13 +35,13 @@ async function signingFromEnv(): Promise<Signing> {
     storePassword: KEYSTORE_PASSWORD,
     alias: KEY_ALIAS,
     keyPassword: KEY_PASSWORD,
-    signer: process.env.SIGNER_NAME ?? "apk-builds",
+    signer: process.env.SIGNER_NAME ?? "Auto Murph APK Builds",
   };
 }
 
 async function resolveVersion(app: App, tools: Tools): Promise<string> {
   if (app.version !== "auto") return app.version;
-  const versions = await supportedVersions(tools, app.package);
+  const versions = await supportedVersions(tools, app.package, app.experimental);
   const best = versions[0];
   if (!best) throw new Error(`Patches ${tools.patchesVersion} list no supported versions for ${app.package}`);
   log(`Supported versions: ${versions.map((v) => `${v.version} (${v.patches})`).join(", ")}`);
@@ -133,9 +137,17 @@ async function main(): Promise<void> {
       if (!arg) throw new Error(USAGE);
       const app = await loadApp(arg);
       const tools = await fetchTools(await loadSource(app.source));
-      for (const v of await supportedVersions(tools, app.package)) console.log(`${v.version}\t${v.patches} patches`);
+      for (const v of await supportedVersions(tools, app.package, app.experimental)) console.log(`${v.version}\t${v.patches} patches`);
       break;
     }
+    case "merge-codes": {
+      const added = await mergeVersionCodes(positionals.slice(1));
+      log(`Merged ${added} new version code(s)`);
+      break;
+    }
+    case "catalog":
+      await writeCatalog();
+      break;
     default:
       console.log(USAGE);
       process.exitCode = cmd ? 1 : 0;

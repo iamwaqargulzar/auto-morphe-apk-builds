@@ -1,0 +1,30 @@
+name: Request an app
+description: Ask for a patched build of another Android app.
+title: "App request: "
+labels: ["app-request"]
+body:
+  - type: input
+    id: app
+    attributes:
+      label: App name
+      placeholder: e.g. YouTube Music
+    validations:
+      required: true
+  - type: input
+    id: link
+    attributes:
+      label: Google Play link or package name
+      placeholder: https://play.google.com/store/apps/details?id=com.google.android.apps.youtube.music
+    validations:
+      required: true
+  - type: input
+    id: patches
+    attributes:
+      label: Patch source (optional)
+      description: A GitHub repo with Morphe patches for this app, if you know one.
+      placeholder: https://github.com/owner/repo
+  - type: textarea
+    id: why
+    attributes:
+      label: What should the patched app do?
+      placeholder: e.g. remove ads, enable background play

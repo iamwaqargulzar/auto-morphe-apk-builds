@@ -7,3 +7,5 @@ out/
 *.apk
 *.apks
 .env
+dist/
+site/.astro/

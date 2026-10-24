@@ -17,6 +17,20 @@ export async function lookupVersionCode(pkg: string, version: string): Promise<n
   return (await load())[pkg]?.[version];
 }
 
+/** Merge other version-codes.json files (e.g. from parallel CI jobs) into ours. */
+export async function mergeVersionCodes(files: string[]): Promise<number> {
+  let added = 0;
+  for (const f of files) {
+    const other = JSON.parse(await readFile(f, "utf8")) as Codes;
+    for (const [pkg, versions] of Object.entries(other)) {
+      for (const [version, code] of Object.entries(versions)) {
+        if (await recordVersionCode(pkg, version, code)) added++;
+      }
+    }
+  }
+  return added;
+}
+
 /** Record a code; returns true if the file changed. */
 export async function recordVersionCode(pkg: string, version: string, code: number): Promise<boolean> {
   const codes = await load();

@@ -1,0 +1,29 @@
+---
+import type { CatalogApp } from "../../../tool/catalog.ts";
+import { ARCH_LABEL, mb } from "../lib";
+
+interface Props {
+  app: CatalogApp;
+}
+const { app } = Astro.props;
+const assets = app.latest?.assets ?? [];
+---
+{
+  assets.length ? (
+    <div class="row">
+      {assets.map((a, i) => (
+        <a class={i === 0 ? "btn" : "btn ghost"} href={a.url} download>
+          Download {a.arch} <small>{mb(a.size)}</small>
+        </a>
+      ))}
+      {app.obtainium["arm64-v8a"] && (
+        <a class="btn ghost" href={app.obtainium["arm64-v8a"]}>Add to Obtainium</a>
+      )}
+    </div>
+    <p class="muted" style="font-size:14px;margin:8px 0 0">
+      {assets.map((a) => `${a.arch}: ${ARCH_LABEL[a.arch]}`).join(" · ")}
+    </p>
+  ) : (
+    <p class="muted">No build published yet. It will appear here after the next successful run.</p>
+  )
+}

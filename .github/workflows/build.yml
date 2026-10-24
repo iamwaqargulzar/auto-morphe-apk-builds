@@ -77,3 +77,36 @@ jobs:
           # rejects GitHub's IPs, so these are required on Actions.
           GOOPDL_ACCOUNT_EMAIL: ${{ secrets.GOOPDL_ACCOUNT_EMAIL }}
           GOOPDL_AAS_TOKEN: ${{ secrets.GOOPDL_AAS_TOKEN }}
+      # Version codes learned from Google Play; merged and committed below.
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: codes-${{ matrix.app }}
+          path: state/version-codes.json
+          retention-days: 1
+          if-no-files-found: ignore
+
+  record:
+    needs: build
+    if: always() && needs.build.result != 'skipped'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: codes-*
+          path: .cache/codes
+      - run: npm run -s apkb -- merge-codes .cache/codes/*/version-codes.json
+      - name: Commit learned version codes
+        run: |
+          git diff --quiet -- state/ && exit 0
+          git config user.name "Waqar Gulzar"
+          git config user.email "96654715+iamwaqargulzar@users.noreply.github.com"
+          git add state/
+          git commit -m "Record Google Play version codes"
+          git push

@@ -1,0 +1,167 @@
+---
+import Base from "../layouts/Base.astro";
+import Downloads from "../components/Downloads.astro";
+import { appUrl, catalog, day, lastBuild, microgUrl, project, repoUrl, requestUrl } from "../lib";
+
+const apps = catalog.apps;
+const names = apps.map((a) => a.name).join(", ");
+const title = `${project.name}: patched ${names} APKs, rebuilt automatically`;
+const description = `Free patched Android APKs for ${names}, built daily from the official Google Play app with community patches, signed with one stable key and installable with auto-updates via Obtainium.`;
+
+const faq: { q: string; a: string }[] = [
+  {
+    q: "What is Auto Murph APK Builds?",
+    a: `A free, open-source project that downloads official Android apps from Google Play, applies community patches with the Morphe patcher (for example ad blocking and extra settings) and publishes the result as ready-to-install APK files. Everything runs on GitHub Actions; the build scripts and logs are public.`,
+  },
+  {
+    q: "Which APK file should I download?",
+    a: "Pick arm64-v8a for almost any phone made since about 2017. Pick armeabi-v7a only for older or budget phones with a 32-bit processor. If you are unsure, install the free app 'CPU-Z' or 'Droid Hardware Info' and look for the instruction set, or just try arm64-v8a first; Android refuses to install the wrong one.",
+  },
+  {
+    q: "Do I need root?",
+    a: "No. These are non-root builds that install like any other APK on an unmodified phone.",
+  },
+  {
+    q: "Why does YouTube need MicroG-RE?",
+    a: "Patched YouTube can't use Google Play Services directly because it is signed with a different key. MicroG-RE is a small open-source replacement that handles Google sign-in and notifications. Install it once, then sign in to YouTube as usual. Without it, YouTube works signed out.",
+  },
+  {
+    q: "Can I install it over the official app?",
+    a: "Not for YouTube: the patched build uses a different package name, so it installs alongside the official app. For apps that keep the original package name (such as Reddit), uninstall the Play Store version first, because Android only updates an app with an APK signed by the same key.",
+  },
+  {
+    q: "How do updates work?",
+    a: "Every day the build checks whether the patches or the supported app version changed and publishes a new release if so. Use Obtainium to get notified and update in one tap, or check this page.",
+  },
+  {
+    q: "Is it safe?",
+    a: `The original APK comes straight from Google Play, the patches are open source, and every build runs in public on GitHub Actions. Each APK is signed with the same certificate (SHA-256 ${project.certSha256}); you can check it with apksigner or the 'App Manager' app before installing. As with any modified app, use an account you are comfortable using with it.`,
+  },
+  {
+    q: "Is this legal?",
+    a: "This is not legal advice. The patches are open source (GPLv3) and their license notice ships with every release, and the original apps are free downloads. Using a modified client can go against a service's terms of service, so decide for yourself whether that is acceptable for your account.",
+  },
+  {
+    q: "Can I request another app?",
+    a: "Yes. Open the request form on GitHub with the app name or Play Store link. Requests are reviewed, and apps are added when a maintained patch set supports them.",
+  },
+];
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: project.name,
+    url: project.site,
+    description,
+  },
+  ...apps.map((a) => ({
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: `${a.name} (patched by ${project.name})`,
+    operatingSystem: "Android",
+    applicationCategory: "MultimediaApplication",
+    softwareVersion: a.latest?.version,
+    datePublished: a.latest?.date,
+    description: a.about,
+    url: new URL(appUrl(a), project.site).toString(),
+    downloadUrl: a.latest?.assets[0]?.url,
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  })),
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+  },
+];
+---
+<Base title={title} description={description} path="/" jsonLd={jsonLd}>
+  <section>
+    <h1>Patched {names} for Android, rebuilt automatically</h1>
+    <p class="lead">
+      Free, non-root APKs built from the official Google Play apps with open-source patches: no ads, more settings,
+      one stable signing key and one-tap updates through Obtainium.
+    </p>
+    <p class="muted" style="margin-top:12px">
+      {lastBuild ? <>Last build: {day(lastBuild)} · </> : null}Builds run daily on <a href={`${repoUrl}/actions`}>GitHub Actions</a>
+    </p>
+  </section>
+
+  <h2 id="apps">Apps</h2>
+  <div class="grid">
+    {
+      apps.map((a) => (
+        <article class="card">
+          <div class="row" style="margin-bottom:10px">
+            {a.icon && <img src={a.icon} width="48" height="48" alt={`${a.name} icon`} style="border-radius:12px" />}
+            <div>
+              <h3><a href={appUrl(a)} style="color:inherit;text-decoration:none">{a.name}</a></h3>
+              <span class="pill">{a.latest ? `v${a.latest.version}` : "not built yet"}</span>
+              {a.latest && <span class="pill">{a.latest.applied.length} patches</span>}
+            </div>
+          </div>
+          <p class="muted" style="margin:0 0 14px;font-size:15px">{a.about}</p>
+          <Downloads app={a} />
+          {a.microg && (
+            <p style="font-size:14px;margin:10px 0 0">
+              Needs <a href={microgUrl}>MicroG-RE</a> to sign in with Google.
+            </p>
+          )}
+          <p style="font-size:14px;margin:10px 0 0"><a href={appUrl(a)}>Details, patch list and older versions →</a></p>
+        </article>
+      ))
+    }
+  </div>
+
+  <h2 id="install">How to install</h2>
+  <div class="card">
+    <ol class="steps">
+      <li>Download the <strong>arm64-v8a</strong> APK for your app (or armeabi-v7a on an older 32-bit phone).</li>
+      <li>Open the file on your phone. If Android asks, allow your browser or file manager to <em>install unknown apps</em>.</li>
+      <li>For <strong>YouTube</strong>: also install <a href={microgUrl}>MicroG-RE</a> if you want to sign in with your Google account.</li>
+      <li>For apps that keep their original name (like <strong>Reddit</strong>): uninstall the Play Store version first.</li>
+      <li>Optional: add the app to <a href="https://obtainium.imranr.dev">Obtainium</a> (button above) to get updates automatically.</li>
+    </ol>
+  </div>
+
+  <h2 id="obtainium">Automatic updates with Obtainium</h2>
+  <div class="card">
+    <p style="margin-top:0">
+      <a href="https://obtainium.imranr.dev">Obtainium</a> is a free Android app that installs updates straight from the source.
+      Tap <strong>Add to Obtainium</strong> on any app above, or import every app at once:
+    </p>
+    <ol class="steps">
+      <li>In Obtainium, open <strong>Import/Export</strong> and choose <strong>Import from URL</strong>.</li>
+      <li>Paste <code>{new URL("/obtainium.json", project.site).toString()}</code> and confirm.</li>
+    </ol>
+    <p class="muted" style="margin-bottom:0">The import uses the arm64-v8a files. On a 32-bit phone, add apps one by one from their detail pages instead.</p>
+  </div>
+
+  <h2 id="verify">Verify a download</h2>
+  <div class="card">
+    <p style="margin-top:0">Every APK is signed with the same certificate. Its SHA-256 fingerprint is:</p>
+    <p class="mono">{project.certSha256}</p>
+    <p class="muted" style="margin-bottom:0">
+      Check it with <code>apksigner verify --print-certs file.apk</code> on a computer, or with the App Manager app on Android.
+      If the fingerprint differs, don't install the file.
+    </p>
+  </div>
+
+  <h2 id="faq">Frequently asked questions</h2>
+  <div class="card">
+    {faq.map((f) => (
+      <details>
+        <summary>{f.q}</summary>
+        <p>{f.a}</p>
+      </details>
+    ))}
+  </div>
+
+  <h2 id="request">Request an app</h2>
+  <div class="card">
+    <p style="margin-top:0">
+      Want another app? <a href={requestUrl}>Open a request on GitHub</a> with the app name or its Play Store link.
+      Apps are added when a maintained patch set supports them.
+    </p>
+  </div>
+</Base>

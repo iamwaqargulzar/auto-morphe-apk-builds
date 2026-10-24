@@ -10,3 +10,7 @@ arches: [arm64-v8a, armeabi-v7a]
 # Patch names to force on / off (empty = patch bundle defaults).
 include: []
 exclude: []
+about: >-
+  YouTube without ads, with background play, SponsorBlock, Return YouTube
+  Dislike, video downloads and over 100 other tweaks.
+microg: true

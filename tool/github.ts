@@ -11,7 +11,7 @@ function headers(): Record<string, string> {
   const h: Record<string, string> = {
     Accept: "application/vnd.github+json",
     "X-GitHub-Api-Version": "2022-11-28",
-    "User-Agent": "apk-builds",
+    "User-Agent": "auto-murph-apk-builds",
   };
   if (token) h.Authorization = `Bearer ${token}`;
   return h;
@@ -50,7 +50,7 @@ export async function downloadAsset(asset: ReleaseAsset, dest: string): Promise<
   if (existing?.size === asset.size) return dest;
   await mkdir(dirname(dest), { recursive: true });
   log(`Downloading ${asset.name} (${(asset.size / 1e6).toFixed(1)} MB)`);
-  const res = await fetch(asset.browser_download_url, { headers: { "User-Agent": "apk-builds" } });
+  const res = await fetch(asset.browser_download_url, { headers: { "User-Agent": "auto-murph-apk-builds" } });
   if (!res.ok || !res.body) throw new Error(`Download failed ${res.status}: ${asset.browser_download_url}`);
   const tmp = `${dest}.part`;
   await pipeline(Readable.fromWeb(res.body as never), createWriteStream(tmp));

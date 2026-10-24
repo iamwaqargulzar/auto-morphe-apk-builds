@@ -1,0 +1,125 @@
+---
+import Base from "../../layouts/Base.astro";
+import Downloads from "../../components/Downloads.astro";
+import { ARCH_LABEL, catalog, day, mb, microgUrl, project, repoUrl } from "../../lib";
+import type { CatalogApp } from "../../../../tool/catalog.ts";
+
+export function getStaticPaths() {
+  return catalog.apps.map((app) => ({ params: { id: app.id }, props: { app } }));
+}
+
+const { app } = Astro.props as { app: CatalogApp };
+const r = app.latest;
+const title = r
+  ? `${app.name} ${r.version} patched APK (arm64 & armv7) | ${project.name}`
+  : `${app.name} patched APK | ${project.name}`;
+const description = `Download patched ${app.name} ${r?.version ?? ""} for Android (${app.package}). ${app.about}`.replace(/\s+/g, " ");
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: `${app.name} (patched)`,
+    operatingSystem: "Android",
+    applicationCategory: "MultimediaApplication",
+    softwareVersion: r?.version,
+    datePublished: r?.date,
+    fileSize: r?.assets[0] ? mb(r.assets[0].size) : undefined,
+    description: app.about,
+    downloadUrl: r?.assets.map((a) => a.url),
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: project.name, item: project.site },
+      { "@type": "ListItem", position: 2, name: app.name, item: new URL(`/apps/${app.id}/`, project.site).toString() },
+    ],
+  },
+];
+---
+<Base title={title} description={description} path={`/apps/${app.id}/`} jsonLd={jsonLd}>
+  <p class="muted" style="margin:0 0 16px"><a href="/">All apps</a> / {app.name}</p>
+  <div class="row" style="gap:16px;margin-bottom:12px">
+    {app.icon && <img src={app.icon} width="72" height="72" alt={`${app.name} icon`} style="border-radius:16px" />}
+    <div>
+      <h1 style="margin:0">{app.name} patched APK</h1>
+      <p class="muted" style="margin:4px 0 0"><code>{app.package}</code>{r && <> · v{r.version} · built {day(r.date)}</>}</p>
+    </div>
+  </div>
+  <p class="lead" style="margin-bottom:20px">{app.about}</p>
+
+  <div class="card">
+    <Downloads app={app} />
+    {app.microg && (
+      <p class="note" style="margin:14px 0 0">
+        To sign in with your Google account, also install <a href={microgUrl}>MicroG-RE</a>. This build installs alongside the official
+        {app.name} app.
+      </p>
+    )}
+    {!app.microg && (
+      <p class="note" style="margin:14px 0 0">
+        This build keeps the original package name: uninstall the Play Store version of {app.name} before installing it.
+      </p>
+    )}
+  </div>
+
+  {r && (
+    <>
+      <h2>Build details</h2>
+      <div class="card scroll">
+        <table>
+          <tbody>
+            <tr><th>App version</th><td>{r.version}</td></tr>
+            <tr><th>Patches</th><td><a href={`https://github.com/${app.source.repo}`}>{app.source.repo}</a> v{r.patchesVersion}</td></tr>
+            <tr><th>Patches applied</th><td>{r.applied.length}{r.failed.length ? `, ${r.failed.length} failed` : ""}</td></tr>
+            <tr><th>Built</th><td>{day(r.date)} · <a href={r.url}>release notes</a></td></tr>
+            {r.assets.map((a) => (
+              <tr><th>{a.arch}</th><td>{ARCH_LABEL[a.arch]} · {mb(a.size)} · <a href={a.url}>{a.name}</a></td></tr>
+            ))}
+            <tr><th>Signing certificate</th><td class="mono">SHA-256 {project.certSha256}</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Obtainium</h2>
+      <div class="card">
+        <p style="margin-top:0">Add {app.name} to Obtainium to get each new build automatically:</p>
+        <div class="row">
+          {app.arches.map((arch) => app.obtainium[arch] && <a class="btn ghost" href={app.obtainium[arch]}>Add {arch} to Obtainium</a>)}
+        </div>
+      </div>
+
+      <h2>What's changed: {r.applied.length} patches</h2>
+      <div class="card">
+        <ul style="columns:2 240px;margin:0;padding-left:18px">
+          {r.applied.map((p) => <li>{p}</li>)}
+        </ul>
+        {r.failed.length > 0 && <p class="note">Not applied in this build: {r.failed.join(", ")}</p>}
+      </div>
+    </>
+  )}
+
+  {app.older.length > 0 && (
+    <>
+      <h2>Older versions</h2>
+      <div class="card scroll">
+        <table>
+          <tbody>
+            {app.older.map((o) => (
+              <tr>
+                <td>{o.version}</td>
+                <td>patches {o.patchesVersion}</td>
+                <td>{day(o.date)}</td>
+                <td>{o.assets.map((a) => <a href={a.url} style="margin-right:10px">{a.arch}</a>)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
+  )}
+
+  <p style="margin-top:32px"><a href={`${repoUrl}/releases?q=${app.id}`}>All {app.name} releases on GitHub →</a></p>
+</Base>

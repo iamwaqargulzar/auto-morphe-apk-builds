@@ -1,0 +1,19 @@
+name: Reddit
+package: com.reddit.frontpage
+source: morphe
+enabled: true
+# "auto" picks the newest version the patches fully support.
+version: auto
+# Reddit patches mark recent versions experimental; the stable ones are too
+# old to fetch from Google Play by version code.
+experimental: true
+# CPU types to build; the first is required, the others are skipped with a
+# warning if Google Play can't provide them.
+arches: [arm64-v8a, armeabi-v7a]
+# Patch names to force on / off (empty = patch bundle defaults).
+include: []
+exclude: []
+about: >-
+  The official Reddit app without ads, Trending shelves or suggested
+  communities, with links that open in your own browser, clean share links,
+  guest browsing and copyable post text.

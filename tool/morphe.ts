@@ -44,8 +44,8 @@ function morphe(tools: Tools, args: string[], quiet = true) {
  * patches, then newest. Parsed from `list-versions` output lines like
  * "\t21.20.405 (104 patches)".
  */
-export async function supportedVersions(tools: Tools, pkg: string): Promise<{ version: string; patches: number }[]> {
-  const res = await morphe(tools, ["list-versions", "--patches", tools.patches, "-f", pkg]);
+export async function supportedVersions(tools: Tools, pkg: string, experimental = false): Promise<{ version: string; patches: number }[]> {
+  const res = await morphe(tools, ["list-versions", "--patches", tools.patches, "-f", pkg, ...(experimental ? ["-x"] : [])]);
   if (res.code !== 0) throw new Error(`list-versions failed:\n${res.stderr || res.stdout}`);
   const out: { version: string; patches: number }[] = [];
   for (const m of res.stdout.matchAll(/^\s+(\S+) \((\d+) patch(?:es)?\)/gm)) {
