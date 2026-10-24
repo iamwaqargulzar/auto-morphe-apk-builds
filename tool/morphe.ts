@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { CLI_ASSET, CLI_REPO, ROOT, type App, type Source } from "./config.ts";
+import { CLI_ASSET, CLI_REPO, ROOT, type App, type Arch, type Source } from "./config.ts";
 import { downloadAsset, latestRelease, pickAsset } from "./github.ts";
 import { compareVersions, run } from "./util.ts";
 
@@ -62,12 +62,12 @@ export interface PatchResult {
   failedPatches: { name?: string; patch?: string; error?: string }[];
 }
 
-export async function patch(tools: Tools, app: App, input: string, output: string, signing: Signing): Promise<PatchResult> {
+export async function patch(tools: Tools, app: App, arch: Arch, input: string, output: string, signing: Signing): Promise<PatchResult> {
   const resultFile = `${output}.result.json`;
   const args = ["patch", "-p", tools.patches];
   for (const name of app.include) args.push("-e", name);
   for (const name of app.exclude) args.push("-d", name);
-  if (app.arch !== "universal") args.push("--striplibs", app.arch);
+  args.push("--striplibs", arch);
   args.push(
     "--continue-on-error",
     "-r", resultFile,

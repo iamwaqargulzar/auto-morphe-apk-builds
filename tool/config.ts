@@ -9,6 +9,9 @@ export const ROOT = new URL("..", import.meta.url).pathname;
 export const CLI_REPO = "MorpheApp/morphe-desktop";
 export const CLI_ASSET = /^morphe-desktop-.*-all\.jar$/;
 
+export const ARCHES = ["arm64-v8a", "armeabi-v7a"] as const;
+export type Arch = (typeof ARCHES)[number];
+
 const SourceSchema = z.object({
   name: z.string(),
   patches: z.object({
@@ -23,7 +26,8 @@ const AppSchema = z.object({
   source: z.string(),
   enabled: z.boolean().default(true),
   version: z.string().default("auto"),
-  arch: z.enum(["arm64-v8a", "armeabi-v7a", "x86_64", "universal"]).default("arm64-v8a"),
+  // One APK per CPU type; the first one is required, the rest are best effort.
+  arches: z.array(z.enum(ARCHES)).min(1).default([...ARCHES]),
   include: z.array(z.string()).default([]),
   exclude: z.array(z.string()).default([]),
 });

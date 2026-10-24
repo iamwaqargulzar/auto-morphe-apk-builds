@@ -4,7 +4,9 @@ source: morphe
 enabled: true
 # "auto" picks the newest version the patches fully support.
 version: auto
-arch: arm64-v8a
+# CPU types to build; the first is required, the others are skipped with a
+# warning if Google Play can't provide them.
+arches: [arm64-v8a, armeabi-v7a]
 # Patch names to force on / off (empty = patch bundle defaults).
 include: []
 exclude: []

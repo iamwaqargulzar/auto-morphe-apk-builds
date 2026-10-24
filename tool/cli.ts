@@ -1,10 +1,10 @@
 import { mkdir, rename, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { parseArgs } from "node:util";
-import { ROOT, loadApp, loadApps, loadSource, type App } from "./config.ts";
-import { fetchTools, patch, supportedVersions, type Signing } from "./morphe.ts";
+import { ROOT, loadApp, loadApps, loadSource, type App, type Arch } from "./config.ts";
+import { fetchTools, patch, supportedVersions, type Signing, type Tools } from "./morphe.ts";
 import { downloadFromPlay } from "./play.ts";
-import { deleteRelease, publishRelease, releaseExists, releaseTag } from "./release.ts";
+import { deleteRelease, publishRelease, releaseExists, releaseTag, type Build } from "./release.ts";
 import { log } from "./util.ts";
 
 const USAGE = `Usage:
@@ -35,7 +35,7 @@ async function signingFromEnv(): Promise<Signing> {
   };
 }
 
-async function resolveVersion(app: App, tools: Awaited<ReturnType<typeof fetchTools>>): Promise<string> {
+async function resolveVersion(app: App, tools: Tools): Promise<string> {
   if (app.version !== "auto") return app.version;
   const versions = await supportedVersions(tools, app.package);
   const best = versions[0];
@@ -67,29 +67,44 @@ async function build(appId: string, opts: { force: boolean; release: boolean; re
     await deleteRelease(repo, tag);
   }
 
-  const workDir = join(ROOT, ".cache", "work", app.id);
-  await rm(workDir, { recursive: true, force: true });
-  await mkdir(workDir, { recursive: true });
+  const workRoot = join(ROOT, ".cache", "work", app.id);
+  await rm(workRoot, { recursive: true, force: true });
+  const outDir = join(ROOT, "out");
+  await mkdir(outDir, { recursive: true });
 
-  const input = await downloadFromPlay(app, version, workDir);
+  const builds: Build[] = [];
+  for (const [i, arch] of app.arches.entries()) {
+    try {
+      builds.push(await buildArch(app, arch, version, tools, signing, join(workRoot, arch), outDir));
+    } catch (err) {
+      // The first CPU type is required; the others are best effort.
+      if (i === 0) throw err;
+      log(`WARNING: skipping ${arch}: ${(err as Error).message.split("\n")[0]}`);
+    }
+  }
+
+  if (opts.release && repo) {
+    const url = await publishRelease({ repo, app, version, tools, builds, workDir: workRoot });
+    log(`Released: ${url}`);
+  }
+}
+
+async function buildArch(app: App, arch: Arch, version: string, tools: Tools, signing: Signing, workDir: string, outDir: string): Promise<Build> {
+  log(`--- ${app.name} ${version} ${arch} ---`);
+  await mkdir(workDir, { recursive: true });
+  const input = await downloadFromPlay(app, arch, version, workDir);
   const patched = join(workDir, "patched.apk");
-  const result = await patch(tools, app, input, patched, signing);
+  const result = await patch(tools, app, arch, input, patched, signing);
 
   if (result.packageName !== app.package || result.packageVersion !== version) {
     throw new Error(`Downloaded ${result.packageName} ${result.packageVersion}, expected ${app.package} ${version}`);
   }
-  log(`Patched: ${result.appliedPatches.length} applied, ${result.failedPatches.length} failed`);
+  log(`Patched ${arch}: ${result.appliedPatches.length} applied, ${result.failedPatches.length} failed`);
 
-  const outDir = join(ROOT, "out");
-  await mkdir(outDir, { recursive: true });
-  const apk = join(outDir, `${app.id}-${version}-${app.arch}.apk`);
+  const apk = join(outDir, `${app.id}-${version}-${arch}.apk`);
   await rename(patched, apk);
   log(`Output: ${apk}`);
-
-  if (opts.release && repo) {
-    const url = await publishRelease({ repo, app, version, tools, result, apk, workDir });
-    log(`Released: ${url}`);
-  }
+  return { arch, apk, result };
 }
 
 async function main(): Promise<void> {

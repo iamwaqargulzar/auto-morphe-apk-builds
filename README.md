@@ -7,12 +7,15 @@ Automated patched Android builds, made with GitHub Actions and published to
 |---|---|---|
 | YouTube | `com.google.android.youtube` | [MorpheApp/morphe-patches](https://github.com/MorpheApp/morphe-patches) |
 
+Each release has two APKs: `arm64-v8a` for most phones from 2017 on, `armeabi-v7a` for older or budget 32-bit phones.
+
 YouTube needs [MicroG-RE](https://github.com/MorpheApp/MicroG-RE) installed to sign in with a Google account.
 
 ## How it works
 
 1. `apps/<id>.yml` says which app to build and with which patch source (`sources/<id>.yml`).
-2. The build picks the newest app version the patches support, downloads it from Google Play,
+2. The build picks the newest app version the patches support, downloads it from Google Play
+   (using a dedicated Google account, secrets `GOOPDL_ACCOUNT_EMAIL` / `GOOPDL_AAS_TOKEN`),
    patches it with the Morphe CLI, signs it with this project's key and creates a release.
 3. Builds run daily and on demand (Actions → Build → Run workflow).
 

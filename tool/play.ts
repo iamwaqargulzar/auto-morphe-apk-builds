@@ -1,23 +1,22 @@
 import { copyFile, mkdir, readdir, rm } from "node:fs/promises";
 import { join } from "node:path";
-import type { App } from "./config.ts";
+import type { App, Arch } from "./config.ts";
 import { log, retry, runOk } from "./util.ts";
 import { lookupVersionCode, recordVersionCode } from "./versioncodes.ts";
 
 // Google Play downloader (anonymous token via goopdl), pinned for reproducibility.
 const GOOPDL = process.env.GOOPDL ?? "goopdl@1.2.2";
 
-const DEVICE: Record<App["arch"], string> = {
+// goopdl device type per CPU type.
+const DEVICE: Record<Arch, string> = {
   "arm64-v8a": "arm64",
   "armeabi-v7a": "armv7",
-  x86_64: "x86_64",
-  universal: "arm64",
 };
 
 /** Play's current version of a package, e.g. { version: "21.43.523", code: 1561307650 }. */
-export async function playLatest(app: App): Promise<{ version: string; code: number }> {
+export async function playLatest(app: App, arch: Arch): Promise<{ version: string; code: number }> {
   return retry("Google Play info", 4, 20_000, async () => {
-    const res = await runOk("uvx", [GOOPDL, "info", app.package, "--arch", DEVICE[app.arch]], { quiet: true });
+    const res = await runOk("uvx", [GOOPDL, "info", app.package, "--arch", DEVICE[arch]], { quiet: true });
     const m = res.stdout.match(/Version\s*│\s*(\S+)\s+\((\d+)\)/);
     if (!m) throw new Error(`Could not read version from goopdl info output`);
     return { version: m[1]!, code: Number(m[2]) };
@@ -25,8 +24,8 @@ export async function playLatest(app: App): Promise<{ version: string; code: num
 }
 
 /** Version code for `version`: from our map, or from Play if it is the current version. */
-export async function resolveVersionCode(app: App, version: string): Promise<number> {
-  const latest = await playLatest(app);
+export async function resolveVersionCode(app: App, arch: Arch, version: string): Promise<number> {
+  const latest = await playLatest(app, arch);
   if (await recordVersionCode(app.package, latest.version, latest.code)) {
     log(`Recorded Play's current version ${latest.version} (${latest.code})`);
   }
@@ -44,9 +43,9 @@ export async function resolveVersionCode(app: App, version: string): Promise<num
  * Returns a single .apk, or an .apks bundle (base.apk + split_*.apk) that
  * Morphe accepts directly.
  */
-export async function downloadFromPlay(app: App, version: string, workDir: string): Promise<string> {
-  const code = await resolveVersionCode(app, version);
-  log(`Google Play: ${app.package} ${version} (version code ${code})`);
+export async function downloadFromPlay(app: App, arch: Arch, version: string, workDir: string): Promise<string> {
+  const code = await resolveVersionCode(app, arch, version);
+  log(`Google Play: ${app.package} ${version} for ${arch} (version code ${code})`);
   const dlDir = join(workDir, "play");
   await retry("Google Play download", 5, 30_000, async () => {
     await rm(dlDir, { recursive: true, force: true });
@@ -54,7 +53,7 @@ export async function downloadFromPlay(app: App, version: string, workDir: strin
     await runOk("uvx", [
       GOOPDL, "download", app.package,
       "-v", String(code),
-      "-a", DEVICE[app.arch],
+      "-a", DEVICE[arch],
       "--splits", "--no-extras",
       "-o", dlDir,
     ], { quiet: true });
@@ -77,7 +76,7 @@ export async function downloadFromPlay(app: App, version: string, workDir: strin
     await copyFile(join(dlDir, f), target);
     staged.push(target);
   }
-  const bundle = join(workDir, `${app.id}.apks`);
+  const bundle = join(workDir, `${app.id}-${arch}.apks`);
   await rm(bundle, { force: true });
   await runOk("zip", ["-0", "-q", "-j", bundle, ...staged]);
   return bundle;

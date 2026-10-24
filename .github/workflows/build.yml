@@ -73,3 +73,7 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          # Google Play account for downloads. The anonymous token service
+          # rejects GitHub's IPs, so these are required on Actions.
+          GOOPDL_ACCOUNT_EMAIL: ${{ secrets.GOOPDL_ACCOUNT_EMAIL }}
+          GOOPDL_AAS_TOKEN: ${{ secrets.GOOPDL_AAS_TOKEN }}
