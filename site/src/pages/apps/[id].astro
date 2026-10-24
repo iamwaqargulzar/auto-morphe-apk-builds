@@ -54,8 +54,7 @@ const jsonLd = [
     <Downloads app={app} />
     {app.microg && (
       <p class="note" style="margin:14px 0 0">
-        To sign in with your Google account, also install <a href={microgUrl}>MicroG-RE</a>. This build installs alongside the official
-        {app.name} app.
+        To sign in with your Google account, also install <a href={microgUrl}>MicroG-RE</a>. {`This build installs alongside the official ${app.name} app.`}
       </p>
     )}
     {!app.microg && (
