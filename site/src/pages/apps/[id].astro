@@ -76,6 +76,33 @@ const jsonLd = [
           </p>
         )}
       </div>
+
+      {app.helper && (
+        <div class="card reveal" id="login" style="margin-top:18px">
+          <span class="kicker">Can't log in?</span>
+          <h2 style="font-size:24px;margin-bottom:8px">{app.helper.name}</h2>
+          <p class="muted" style="margin-top:0">
+            {app.name} checks Google Play Integrity at login, and patched builds fail it: you see "incorrect password" and
+            Google sign-in doesn't work. An older version can still log in, and the session survives an update.
+          </p>
+          <ol style="color:var(--muted);padding-left:20px">
+            <li>Uninstall {app.name}.</li>
+            <li>Install the login helper{app.helper.latest ? ` (${app.helper.latest.version})` : ""} and log in with your username and password.</li>
+            <li>Install the current patched {app.name} over it. You stay logged in.</li>
+          </ol>
+          {app.helper.latest ? (
+            <div class="app-actions">
+              {app.helper.latest.assets.map((a, i) => (
+                <a class={`btn sm ${i === 0 ? "primary" : ""}`} href={a.url} download>
+                  Login helper · {a.arch === "arm64-v8a" ? "64-bit" : "32-bit"} <small>{mb(a.size)}</small>
+                </a>
+              ))}
+            </div>
+          ) : (
+            <p class="faint" style="margin:0">The login helper build isn't available yet.</p>
+          )}
+        </div>
+      )}
     </div>
   </section>
 

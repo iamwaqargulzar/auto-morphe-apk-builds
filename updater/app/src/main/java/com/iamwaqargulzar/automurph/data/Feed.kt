@@ -48,6 +48,17 @@ data class FeedApp(
     val patchesVersion: String,
     val patchCount: Int,
     val files: Map<String, FeedFile>,
+    /** Optional extra build, e.g. an old Reddit that can still log in. */
+    val helper: FeedHelper? = null,
+)
+
+@Serializable
+data class FeedHelper(
+    val name: String,
+    val about: String,
+    val versionName: String,
+    val build: String,
+    val files: Map<String, FeedFile>,
 )
 
 @Serializable

@@ -93,8 +93,16 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         _state.update { it.copy(entries = entries(feed, context.packageManager, prefs)) }
     }
 
-    fun install(entry: AppEntry) {
-        val file = entry.file ?: return
+    fun install(entry: AppEntry) = install(entry, entry.file, entry.app.build)
+
+    /** Installs the app's helper build (same package), e.g. Reddit's login helper. */
+    fun installHelper(entry: AppEntry) {
+        val helper = entry.app.helper ?: return
+        install(entry, entry.abi?.let { helper.files[it] }, helper.build)
+    }
+
+    private fun install(entry: AppEntry, file: com.iamwaqargulzar.automurph.data.FeedFile?, build: String) {
+        file ?: return
         val pkg = entry.app.packageName
         if (pkg in _state.value.tasks) return
         viewModelScope.launch {
@@ -102,7 +110,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             runCatching {
                 val apk = Installer.download(context, file.url, file.sha256) { p -> setTask(pkg, Task.Downloading(p)) }
                 setTask(pkg, Task.Installing)
-                pending[pkg] = entry.app.build
+                pending[pkg] = build
                 Installer.install(context, apk, pkg)
             }.onFailure { err ->
                 _state.update { s -> s.copy(tasks = s.tasks - pkg, message = err.message ?: "Download failed") }
@@ -111,7 +119,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun updateAll() {
-        _state.value.entries.filter { it.status == Status.UpdateAvailable }.forEach(::install)
+        _state.value.entries.filter { it.status == Status.UpdateAvailable }.forEach { install(it) }
     }
 
     fun installSelfUpdate() {

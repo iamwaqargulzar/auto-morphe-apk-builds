@@ -46,6 +46,11 @@ const AppSchema = z.object({
   about: z.string().default(""),
   // Needs MicroG-RE to sign in with a Google account (YouTube, YouTube Music).
   microg: z.boolean().default(false),
+  // Apply only the patches in `include` instead of the bundle defaults.
+  exclusive: z.boolean().default(false),
+  // Not listed on its own: an extra build offered on another app's page
+  // (e.g. an old Reddit that can still log in).
+  helperFor: z.string().optional(),
 });
 
 export type Source = z.infer<typeof SourceSchema> & { id: string };

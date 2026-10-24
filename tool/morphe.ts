@@ -80,6 +80,7 @@ export interface PatchResult {
 export async function patch(tools: Tools, app: App, arch: Arch, input: string, output: string, signing: Signing): Promise<PatchResult> {
   const resultFile = `${output}.result.json`;
   const args = ["patch", "-p", tools.patches];
+  if (app.exclusive) args.push("--exclusive");
   for (const name of app.include) args.push("-e", name);
   for (const name of app.exclude) args.push("-d", name);
   args.push("--striplibs", arch);

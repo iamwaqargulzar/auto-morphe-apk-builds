@@ -1,0 +1,15 @@
+name: Reddit login helper
+package: com.reddit.frontpage
+source: morphe
+enabled: true
+helperFor: reddit
+# Old enough to log in: patched Reddit fails Google Play Integrity at login.
+# Log in here, then install the current patched Reddit over it.
+version: "2024.02.0"
+arches: [arm64-v8a, armeabi-v7a]
+exclusive: true
+include: ["Spoof signature"]
+exclude: []
+about: >-
+  Patched Reddit 2024.02.0 for logging in. Install it, log in with your
+  username and password, then update to the current patched Reddit.

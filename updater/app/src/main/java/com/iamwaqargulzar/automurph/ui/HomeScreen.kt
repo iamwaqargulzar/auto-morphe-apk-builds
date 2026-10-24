@@ -361,6 +361,30 @@ private fun AppCard(entry: AppEntry, task: Task?, canInstall: Boolean, vm: MainV
                     if (entry.status == Status.OtherSource) {
                         Detail("Why", "${app.name} on this phone comes from another source (like the Play Store) and is signed differently, so Android can't update it with this build.")
                     }
+                    app.helper?.let { helper ->
+                        Column(
+                            Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp))
+                                .background(MaterialTheme.colorScheme.tertiaryContainer).padding(14.dp),
+                        ) {
+                            Text("Can't log in?", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onTertiaryContainer)
+                            Text(
+                                "${helper.about} (${helper.versionName})",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onTertiaryContainer,
+                            )
+                            if (entry.status == Status.OtherSource) {
+                                Text(
+                                    "Remove the other version first.",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onTertiaryContainer,
+                                )
+                            } else if (task == null) {
+                                FilledTonalButton(onClick = { vm.installHelper(entry) }, enabled = canInstall, modifier = Modifier.padding(top = 8.dp)) {
+                                    Text("Install ${helper.name.lowercase()}")
+                                }
+                            }
+                        }
+                    }
                     Detail("Package", app.packageName)
                     entry.installedVersion?.let { Detail("Installed", it) }
                     Detail("CPU type", entry.abi ?: "none")

@@ -52,6 +52,9 @@ export interface CatalogApp {
   latest: CatalogRelease | null;
   older: CatalogRelease[];
   totalDownloads: number;
+  // Extra build offered on this app's page (e.g. Reddit's login helper).
+  helper: { id: string; name: string; about: string; latest: CatalogRelease | null } | null;
+  helperFor?: string;
 }
 
 export interface Catalog {
@@ -213,6 +216,15 @@ function feedFor(apps: CatalogApp[], updater: UpdaterRelease | null): UpdaterFee
         patchesVersion: r.patchesVersion,
         patchCount: r.applied.length,
         files: Object.fromEntries(r.assets.map((x) => [x.arch, { url: x.url, size: x.size, sha256: x.sha256 }])),
+        helper: a.helper?.latest
+          ? {
+              name: a.helper.name,
+              about: a.helper.about,
+              versionName: a.helper.latest.version,
+              build: a.helper.latest.tag,
+              files: Object.fromEntries(a.helper.latest.assets.map((x) => [x.arch, { url: x.url, size: x.size, sha256: x.sha256 }])),
+            }
+          : null,
       }];
     }),
   };
@@ -254,15 +266,23 @@ export async function buildCatalog(): Promise<Catalog> {
       latest: mine[0] ?? null,
       older: mine.slice(1, 6),
       totalDownloads: mine.reduce((n, r) => n + r.assets.reduce((m, a) => m + a.downloads, 0), 0),
+      helper: null,
+      helperFor: app.helperFor,
     });
   }
+  // Helpers aren't listed on their own; attach each to the app it serves.
+  for (const h of out.filter((a) => a.helperFor)) {
+    const target = out.find((a) => a.id === h.helperFor);
+    if (target) target.helper = { id: h.id, name: h.name, about: h.about, latest: h.latest };
+  }
+  const listed = out.filter((a) => !a.helperFor);
   const updater = await updaterRelease(releases);
   return {
     generatedAt: new Date().toISOString(),
     project: PROJECT,
-    apps: out,
+    apps: listed,
     updater,
-    feed: feedFor(out, updater),
+    feed: feedFor(listed, updater),
   };
 }
 
