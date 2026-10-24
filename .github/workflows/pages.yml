@@ -5,7 +5,7 @@ on:
     branches: [main]
     paths: ["site/**", "tool/**", "apps/**", "package*.json", ".github/workflows/pages.yml"]
   workflow_run:
-    workflows: [Build]
+    workflows: [Build, Updater app]
     types: [completed]
   workflow_dispatch:
 

@@ -1,0 +1,5 @@
+# Instagram patches.
+name: HushGram
+patches:
+  repo: SysAdminDoc/HushGram
+  asset: '^patches-.*\.mpp$'

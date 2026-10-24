@@ -1,0 +1,5 @@
+# X (Twitter) patches.
+name: piko
+patches:
+  repo: crimera/piko-newx
+  asset: '^patches-.*\.mpp$'

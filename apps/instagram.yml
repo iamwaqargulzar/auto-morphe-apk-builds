@@ -1,0 +1,13 @@
+name: Instagram
+package: com.instagram.android
+source: hushgram
+enabled: true
+order: 5
+version: auto
+arches: [arm64-v8a, armeabi-v7a]
+include: []
+exclude: []
+about: >-
+  Instagram without ads, suggested posts or Meta AI, with reel, story and
+  video downloads, read receipts and typing status you control, links that
+  open in your browser and full-resolution photos.

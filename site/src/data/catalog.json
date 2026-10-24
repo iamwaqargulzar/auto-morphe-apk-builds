@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-24T04:39:36.251Z",
+  "generatedAt": "2026-10-24T05:04:39.279Z",
   "project": {
     "name": "Auto Murph APK Builds",
     "repo": "iamwaqargulzar/auto-murph-apk-builds",
@@ -34,14 +34,16 @@
             "name": "youtube-21.20.405-arm64-v8a.apk",
             "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/youtube-v21.20.405-p1.48.0/youtube-21.20.405-arm64-v8a.apk",
             "size": 122043881,
-            "downloads": 1
+            "downloads": 4,
+            "sha256": null
           },
           {
             "arch": "armeabi-v7a",
             "name": "youtube-21.20.405-armeabi-v7a.apk",
             "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/youtube-v21.20.405-p1.48.0/youtube-21.20.405-armeabi-v7a.apk",
             "size": 102024761,
-            "downloads": 1
+            "downloads": 1,
+            "sha256": null
           }
         ],
         "applied": [
@@ -150,14 +152,31 @@
           "Shorts icon style",
           "Player icon style"
         ],
-        "failed": []
+        "failed": [],
+        "installedPackage": null,
+        "versionCode": null
       },
       "older": [],
-      "obtainium": {
-        "arm64-v8a": "https://apps.obtainium.imranr.dev/redirect?r=obtainium%3A%2F%2Fapp%2F%257B%2522id%2522%253A%2522com.google.android.youtube%2522%252C%2522url%2522%253A%2522https%253A%252F%252Fgithub.com%252Fiamwaqargulzar%252Fauto-murph-apk-builds%2522%252C%2522author%2522%253A%2522Auto%2520Murph%2520APK%2520Builds%2522%252C%2522name%2522%253A%2522YouTube%2522%252C%2522preferredApkIndex%2522%253A0%252C%2522additionalSettings%2522%253A%2522%257B%255C%2522includePrereleases%255C%2522%253Afalse%252C%255C%2522fallbackToOlderReleases%255C%2522%253Atrue%252C%255C%2522filterReleaseTitlesByRegEx%255C%2522%253A%255C%2522%255EYouTube%2520%255C%255C%255C%255Cd%255C%2522%252C%255C%2522apkFilterRegEx%255C%2522%253A%255C%2522-arm64-v8a%255C%255C%255C%255C.apk%2524%255C%2522%252C%255C%2522invertAPKFilter%255C%2522%253Afalse%252C%255C%2522autoApkFilterByArch%255C%2522%253Afalse%252C%255C%2522versionExtractionRegEx%255C%2522%253A%255C%2522-v(%255C%255C%255C%255Cd%252B(%253F%253A%255C%255C%255C%255C.%255C%255C%255C%255Cd%252B)%252B)-p%255C%2522%252C%255C%2522matchGroupToUse%255C%2522%253A%255C%25221%255C%2522%252C%255C%2522versionDetection%255C%2522%253Atrue%257D%2522%257D",
-        "armeabi-v7a": "https://apps.obtainium.imranr.dev/redirect?r=obtainium%3A%2F%2Fapp%2F%257B%2522id%2522%253A%2522com.google.android.youtube%2522%252C%2522url%2522%253A%2522https%253A%252F%252Fgithub.com%252Fiamwaqargulzar%252Fauto-murph-apk-builds%2522%252C%2522author%2522%253A%2522Auto%2520Murph%2520APK%2520Builds%2522%252C%2522name%2522%253A%2522YouTube%2522%252C%2522preferredApkIndex%2522%253A0%252C%2522additionalSettings%2522%253A%2522%257B%255C%2522includePrereleases%255C%2522%253Afalse%252C%255C%2522fallbackToOlderReleases%255C%2522%253Atrue%252C%255C%2522filterReleaseTitlesByRegEx%255C%2522%253A%255C%2522%255EYouTube%2520%255C%255C%255C%255Cd%255C%2522%252C%255C%2522apkFilterRegEx%255C%2522%253A%255C%2522-armeabi-v7a%255C%255C%255C%255C.apk%2524%255C%2522%252C%255C%2522invertAPKFilter%255C%2522%253Afalse%252C%255C%2522autoApkFilterByArch%255C%2522%253Afalse%252C%255C%2522versionExtractionRegEx%255C%2522%253A%255C%2522-v(%255C%255C%255C%255Cd%252B(%253F%253A%255C%255C%255C%255C.%255C%255C%255C%255Cd%252B)%252B)-p%255C%2522%252C%255C%2522matchGroupToUse%255C%2522%253A%255C%25221%255C%2522%252C%255C%2522versionDetection%255C%2522%253Atrue%257D%2522%257D"
+      "totalDownloads": 5
+    },
+    {
+      "id": "youtube-music",
+      "name": "YouTube Music",
+      "package": "com.google.android.apps.youtube.music",
+      "about": "YouTube Music without ads, with background play, SponsorBlock for music videos, downloads, third-party lyrics, crossfade and Android Auto support.",
+      "microg": true,
+      "icon": "/icons/youtube-music.png",
+      "source": {
+        "name": "Morphe",
+        "repo": "MorpheApp/morphe-patches"
       },
-      "totalDownloads": 2
+      "arches": [
+        "arm64-v8a",
+        "armeabi-v7a"
+      ],
+      "latest": null,
+      "older": [],
+      "totalDownloads": 0
     },
     {
       "id": "reddit",
@@ -186,14 +205,16 @@
             "name": "reddit-2026.42.0-arm64-v8a.apk",
             "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/reddit-v2026.42.0-p1.48.0/reddit-2026.42.0-arm64-v8a.apk",
             "size": 80790006,
-            "downloads": 1
+            "downloads": 2,
+            "sha256": null
           },
           {
             "arch": "armeabi-v7a",
             "name": "reddit-2026.42.0-armeabi-v7a.apk",
             "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/reddit-v2026.42.0-p1.48.0/reddit-2026.42.0-armeabi-v7a.apk",
             "size": 76632307,
-            "downloads": 1
+            "downloads": 1,
+            "sha256": null
           }
         ],
         "applied": [
@@ -227,33 +248,191 @@
           "Spoof signature",
           "Start as guest"
         ],
-        "failed": []
+        "failed": [],
+        "installedPackage": null,
+        "versionCode": null
       },
       "older": [],
-      "obtainium": {
-        "arm64-v8a": "https://apps.obtainium.imranr.dev/redirect?r=obtainium%3A%2F%2Fapp%2F%257B%2522id%2522%253A%2522com.reddit.frontpage%2522%252C%2522url%2522%253A%2522https%253A%252F%252Fgithub.com%252Fiamwaqargulzar%252Fauto-murph-apk-builds%2522%252C%2522author%2522%253A%2522Auto%2520Murph%2520APK%2520Builds%2522%252C%2522name%2522%253A%2522Reddit%2522%252C%2522preferredApkIndex%2522%253A0%252C%2522additionalSettings%2522%253A%2522%257B%255C%2522includePrereleases%255C%2522%253Afalse%252C%255C%2522fallbackToOlderReleases%255C%2522%253Atrue%252C%255C%2522filterReleaseTitlesByRegEx%255C%2522%253A%255C%2522%255EReddit%2520%255C%255C%255C%255Cd%255C%2522%252C%255C%2522apkFilterRegEx%255C%2522%253A%255C%2522-arm64-v8a%255C%255C%255C%255C.apk%2524%255C%2522%252C%255C%2522invertAPKFilter%255C%2522%253Afalse%252C%255C%2522autoApkFilterByArch%255C%2522%253Afalse%252C%255C%2522versionExtractionRegEx%255C%2522%253A%255C%2522-v(%255C%255C%255C%255Cd%252B(%253F%253A%255C%255C%255C%255C.%255C%255C%255C%255Cd%252B)%252B)-p%255C%2522%252C%255C%2522matchGroupToUse%255C%2522%253A%255C%25221%255C%2522%252C%255C%2522versionDetection%255C%2522%253Atrue%257D%2522%257D",
-        "armeabi-v7a": "https://apps.obtainium.imranr.dev/redirect?r=obtainium%3A%2F%2Fapp%2F%257B%2522id%2522%253A%2522com.reddit.frontpage%2522%252C%2522url%2522%253A%2522https%253A%252F%252Fgithub.com%252Fiamwaqargulzar%252Fauto-murph-apk-builds%2522%252C%2522author%2522%253A%2522Auto%2520Murph%2520APK%2520Builds%2522%252C%2522name%2522%253A%2522Reddit%2522%252C%2522preferredApkIndex%2522%253A0%252C%2522additionalSettings%2522%253A%2522%257B%255C%2522includePrereleases%255C%2522%253Afalse%252C%255C%2522fallbackToOlderReleases%255C%2522%253Atrue%252C%255C%2522filterReleaseTitlesByRegEx%255C%2522%253A%255C%2522%255EReddit%2520%255C%255C%255C%255Cd%255C%2522%252C%255C%2522apkFilterRegEx%255C%2522%253A%255C%2522-armeabi-v7a%255C%255C%255C%255C.apk%2524%255C%2522%252C%255C%2522invertAPKFilter%255C%2522%253Afalse%252C%255C%2522autoApkFilterByArch%255C%2522%253Afalse%252C%255C%2522versionExtractionRegEx%255C%2522%253A%255C%2522-v(%255C%255C%255C%255Cd%252B(%253F%253A%255C%255C%255C%255C.%255C%255C%255C%255Cd%252B)%252B)-p%255C%2522%252C%255C%2522matchGroupToUse%255C%2522%253A%255C%25221%255C%2522%252C%255C%2522versionDetection%255C%2522%253Atrue%257D%2522%257D"
+      "totalDownloads": 3
+    },
+    {
+      "id": "x",
+      "name": "X",
+      "package": "com.twitter.android",
+      "about": "X (Twitter) without ads, AI-generated posts or \"who to follow\", with the classic Twitter branding, post sharing as images, poll results and many timeline and layout options.",
+      "microg": false,
+      "icon": "/icons/x.png",
+      "source": {
+        "name": "piko",
+        "repo": "crimera/piko-newx"
       },
-      "totalDownloads": 2
+      "arches": [
+        "arm64-v8a",
+        "armeabi-v7a"
+      ],
+      "latest": null,
+      "older": [],
+      "totalDownloads": 0
+    },
+    {
+      "id": "instagram",
+      "name": "Instagram",
+      "package": "com.instagram.android",
+      "about": "Instagram without ads, suggested posts or Meta AI, with reel, story and video downloads, read receipts and typing status you control, links that open in your browser and full-resolution photos.",
+      "microg": false,
+      "icon": "/icons/instagram.png",
+      "source": {
+        "name": "HushGram",
+        "repo": "SysAdminDoc/HushGram"
+      },
+      "arches": [
+        "arm64-v8a",
+        "armeabi-v7a"
+      ],
+      "latest": null,
+      "older": [],
+      "totalDownloads": 0
+    },
+    {
+      "id": "threads",
+      "name": "Threads",
+      "package": "com.instagram.barcelona",
+      "about": "Threads without ads, suggested users or analytics, with photo and video saving, best image quality, links that open in your browser and a pure black dark mode.",
+      "microg": false,
+      "icon": "/icons/threads.png",
+      "source": {
+        "name": "HushThreads",
+        "repo": "SysAdminDoc/HushThreads"
+      },
+      "arches": [
+        "arm64-v8a",
+        "armeabi-v7a"
+      ],
+      "latest": null,
+      "older": [],
+      "totalDownloads": 0
+    },
+    {
+      "id": "telegram",
+      "name": "Telegram",
+      "package": "org.telegram.messenger",
+      "about": "Telegram without sponsored messages, Premium and Stars promotions or analytics, with deleted-message keeping, faster downloads, link tracking removal and dozens of interface tweaks.",
+      "microg": false,
+      "icon": "/icons/telegram.png",
+      "source": {
+        "name": "HushTelegram",
+        "repo": "SysAdminDoc/HushTelegram"
+      },
+      "arches": [
+        "arm64-v8a",
+        "armeabi-v7a"
+      ],
+      "latest": null,
+      "older": [],
+      "totalDownloads": 0
+    },
+    {
+      "id": "tiktok",
+      "name": "TikTok",
+      "package": "com.zhiliaoapp.musically",
+      "about": "TikTok without feed ads, shopping clutter or popups, with tracker and analytics blocking, links that open in your browser, a seek bar, remembered playback speed and clean share links.",
+      "microg": false,
+      "icon": "/icons/tiktok.png",
+      "source": {
+        "name": "kveld",
+        "repo": "kveld9/kveld-morphe-patches"
+      },
+      "arches": [
+        "arm64-v8a",
+        "armeabi-v7a"
+      ],
+      "latest": null,
+      "older": [],
+      "totalDownloads": 0
+    },
+    {
+      "id": "brave",
+      "name": "Brave",
+      "package": "com.brave.browser",
+      "about": "Brave browser without sponsored start-page content, promo notifications or usage analytics, with less background battery drain and a smaller install.",
+      "microg": false,
+      "icon": "/icons/brave.png",
+      "source": {
+        "name": "kveld",
+        "repo": "kveld9/kveld-morphe-patches"
+      },
+      "arches": [
+        "arm64-v8a",
+        "armeabi-v7a"
+      ],
+      "latest": null,
+      "older": [],
+      "totalDownloads": 0
     }
   ],
-  "obtainiumImport": {
+  "updater": null,
+  "feed": {
+    "schema": 1,
+    "generatedAt": "2026-10-24T05:04:39.279Z",
+    "site": "https://apk.iamwaqargulzar.com",
+    "certSha256": "6d831c775556390514d34b2c0d186920caa7a9aa8304087bdb24839773807aa7",
+    "updater": null,
     "apps": [
       {
-        "id": "com.google.android.youtube",
-        "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds",
-        "author": "Auto Murph APK Builds",
+        "id": "youtube",
         "name": "YouTube",
-        "preferredApkIndex": 0,
-        "additionalSettings": "{\"includePrereleases\":false,\"fallbackToOlderReleases\":true,\"filterReleaseTitlesByRegEx\":\"^YouTube \\\\d\",\"apkFilterRegEx\":\"-arm64-v8a\\\\.apk$\",\"invertAPKFilter\":false,\"autoApkFilterByArch\":false,\"versionExtractionRegEx\":\"-v(\\\\d+(?:\\\\.\\\\d+)+)-p\",\"matchGroupToUse\":\"1\",\"versionDetection\":true}"
+        "about": "YouTube without ads, with background play, SponsorBlock, Return YouTube Dislike, video downloads and over 100 other tweaks.",
+        "icon": "https://apk.iamwaqargulzar.com/icons/youtube.png",
+        "package": "com.google.android.youtube",
+        "originalPackage": "com.google.android.youtube",
+        "versionName": "21.20.405",
+        "build": "youtube-v21.20.405-p1.48.0",
+        "releasedAt": "2026-10-24T04:26:21Z",
+        "releaseUrl": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/tag/youtube-v21.20.405-p1.48.0",
+        "microg": true,
+        "patchesRepo": "MorpheApp/morphe-patches",
+        "patchesVersion": "1.48.0",
+        "patchCount": 104,
+        "files": {
+          "arm64-v8a": {
+            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/youtube-v21.20.405-p1.48.0/youtube-21.20.405-arm64-v8a.apk",
+            "size": 122043881,
+            "sha256": null
+          },
+          "armeabi-v7a": {
+            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/youtube-v21.20.405-p1.48.0/youtube-21.20.405-armeabi-v7a.apk",
+            "size": 102024761,
+            "sha256": null
+          }
+        }
       },
       {
-        "id": "com.reddit.frontpage",
-        "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds",
-        "author": "Auto Murph APK Builds",
+        "id": "reddit",
         "name": "Reddit",
-        "preferredApkIndex": 0,
-        "additionalSettings": "{\"includePrereleases\":false,\"fallbackToOlderReleases\":true,\"filterReleaseTitlesByRegEx\":\"^Reddit \\\\d\",\"apkFilterRegEx\":\"-arm64-v8a\\\\.apk$\",\"invertAPKFilter\":false,\"autoApkFilterByArch\":false,\"versionExtractionRegEx\":\"-v(\\\\d+(?:\\\\.\\\\d+)+)-p\",\"matchGroupToUse\":\"1\",\"versionDetection\":true}"
+        "about": "The official Reddit app without ads, Trending shelves or suggested communities, with links that open in your own browser, clean share links, guest browsing and copyable post text.",
+        "icon": "https://apk.iamwaqargulzar.com/icons/reddit.png",
+        "package": "com.reddit.frontpage",
+        "originalPackage": "com.reddit.frontpage",
+        "versionName": "2026.42.0",
+        "build": "reddit-v2026.42.0-p1.48.0",
+        "releasedAt": "2026-10-24T04:26:02Z",
+        "releaseUrl": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/tag/reddit-v2026.42.0-p1.48.0",
+        "microg": false,
+        "patchesRepo": "MorpheApp/morphe-patches",
+        "patchesVersion": "1.48.0",
+        "patchCount": 29,
+        "files": {
+          "arm64-v8a": {
+            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/reddit-v2026.42.0-p1.48.0/reddit-2026.42.0-arm64-v8a.apk",
+            "size": 80790006,
+            "sha256": null
+          },
+          "armeabi-v7a": {
+            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/reddit-v2026.42.0-p1.48.0/reddit-2026.42.0-armeabi-v7a.apk",
+            "size": 76632307,
+            "sha256": null
+          }
+        }
       }
     ]
   }

@@ -1,0 +1,5 @@
+# Telegram patches.
+name: HushTelegram
+patches:
+  repo: SysAdminDoc/HushTelegram
+  asset: '^patches-.*\.mpp$'

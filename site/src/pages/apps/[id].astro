@@ -10,10 +10,12 @@ export function getStaticPaths() {
 
 const { app } = Astro.props as { app: CatalogApp };
 const r = app.latest;
+const updater = catalog.updater;
 const title = r
-  ? `${app.name} ${r.version} patched APK (arm64 & armv7) | ${project.name}`
+  ? `${app.name} ${r.version} patched APK: no ads, ${r.applied.length} patches | ${project.name}`
   : `${app.name} patched APK | ${project.name}`;
-const description = `Download patched ${app.name} ${r?.version ?? ""} for Android (${app.package}). ${app.about}`.replace(/\s+/g, " ");
+const description = `Download patched ${app.name}${r ? ` ${r.version}` : ""} for Android (64-bit and 32-bit). ${app.about}`.replace(/\s+/g, " ");
+const installed = r?.installedPackage ?? app.package;
 
 const jsonLd = [
   {
@@ -40,85 +42,96 @@ const jsonLd = [
 ];
 ---
 <Base title={title} description={description} path={`/apps/${app.id}/`} jsonLd={jsonLd}>
-  <p class="muted" style="margin:0 0 16px"><a href="/">All apps</a> / {app.name}</p>
-  <div class="row" style="gap:16px;margin-bottom:12px">
-    {app.icon && <img src={app.icon} width="72" height="72" alt={`${app.name} icon`} style="border-radius:16px" />}
-    <div>
-      <h1 style="margin:0">{app.name} patched APK</h1>
-      <p class="muted" style="margin:4px 0 0"><code>{app.package}</code>{r && <> · v{r.version} · built {day(r.date)}</>}</p>
-    </div>
-  </div>
-  <p class="lead" style="margin-bottom:20px">{app.about}</p>
-
-  <div class="card">
-    <Downloads app={app} />
-    {app.microg && (
-      <p class="note" style="margin:14px 0 0">
-        To sign in with your Google account, also install <a href={microgUrl}>MicroG-RE</a>. {`This build installs alongside the official ${app.name} app.`}
-      </p>
-    )}
-    {!app.microg && (
-      <p class="note" style="margin:14px 0 0">
-        This build keeps the original package name: uninstall the Play Store version of {app.name} before installing it.
-      </p>
-    )}
-  </div>
-
-  {r && (
-    <>
-      <h2>Build details</h2>
-      <div class="card scroll">
-        <table>
-          <tbody>
-            <tr><th>App version</th><td>{r.version}</td></tr>
-            <tr><th>Patches</th><td><a href={`https://github.com/${app.source.repo}`}>{app.source.repo}</a> v{r.patchesVersion}</td></tr>
-            <tr><th>Patches applied</th><td>{r.applied.length}{r.failed.length ? `, ${r.failed.length} failed` : ""}</td></tr>
-            <tr><th>Built</th><td>{day(r.date)} · <a href={r.url}>release notes</a></td></tr>
-            {r.assets.map((a) => (
-              <tr><th>{a.arch}</th><td>{ARCH_LABEL[a.arch]} · {mb(a.size)} · <a href={a.url}>{a.name}</a></td></tr>
-            ))}
-            <tr><th>Signing certificate</th><td class="mono">SHA-256 {project.certSha256}</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h2>Obtainium</h2>
-      <div class="card">
-        <p style="margin-top:0">Add {app.name} to Obtainium to get each new build automatically:</p>
-        <div class="row">
-          {app.arches.map((arch) => app.obtainium[arch] && <a class="btn ghost" href={app.obtainium[arch]}>Add {arch} to Obtainium</a>)}
+  <section style="padding-top:48px;padding-bottom:40px">
+    <div class="wrap">
+      <p class="crumbs"><a href="/#apps">All apps</a> / {app.name}</p>
+      <div class="detail-hero reveal">
+        {app.icon && <img src={app.icon} alt={`${app.name} icon`} width="96" height="96" />}
+        <div style="flex:1;min-width:240px">
+          <h1 class="h2">{app.name}, <span class="grad-text">patched.</span></h1>
+          <div class="tags" style="margin-top:12px">
+            {r ? <span class="tag">v{r.version}</span> : <span class="tag warn">coming soon</span>}
+            {r && <span class="tag accent">{r.applied.length} patches</span>}
+            {r && <span class="tag">built {day(r.date)}</span>}
+            {app.microg && <span class="tag">needs MicroG-RE</span>}
+          </div>
         </div>
       </div>
+      <p class="lead reveal" style="margin-top:22px">{app.about}</p>
 
-      <h2>What's changed: {r.applied.length} patches</h2>
-      <div class="card">
-        <ul style="columns:2 240px;margin:0;padding-left:18px">
-          {r.applied.map((p) => <li>{p}</li>)}
-        </ul>
-        {r.failed.length > 0 && <p class="note">Not applied in this build: {r.failed.join(", ")}</p>}
+      <div class="card reveal" style="margin-top:28px">
+        <Downloads app={app} />
+        {updater && r && (
+          <p class="muted" style="margin:14px 0 0;font-size:15px">
+            Easier: install <a href={updater.url}>Auto Murph</a>. It picks the right file and keeps {app.name} updated.
+          </p>
+        )}
+        {app.microg ? (
+          <p class="note" style="margin:16px 0 0">
+            Installs alongside the official {app.name}. For Google sign-in, also install <a href={microgUrl}>MicroG-RE</a>.
+          </p>
+        ) : (
+          <p class="note" style="margin:16px 0 0">
+            Keeps the original package name: uninstall the Play Store version of {app.name} first. Auto Murph offers to do this for you.
+          </p>
+        )}
       </div>
-    </>
+    </div>
+  </section>
+
+  {r && (
+    <section style="padding-top:20px">
+      <div class="wrap split" style="align-items:start">
+        <div class="reveal">
+          <span class="kicker">Build details</span>
+          <dl class="kv">
+            <dt>App version</dt><dd>{r.version}</dd>
+            <dt>Installs as</dt><dd><code>{installed}</code></dd>
+            <dt>Patches</dt><dd><a href={`https://github.com/${app.source.repo}`}>{app.source.repo}</a> v{r.patchesVersion}</dd>
+            <dt>Applied</dt><dd>{r.applied.length}{r.failed.length ? ` · ${r.failed.length} not applied` : ""}</dd>
+            {r.assets.map((a) => (
+              <>
+                <dt>{a.arch}</dt>
+                <dd>{ARCH_LABEL[a.arch]} · {mb(a.size)}{a.sha256 && <><br /><span class="faint mono" style="font-size:12.5px">sha256 {a.sha256}</span></>}</dd>
+              </>
+            ))}
+            <dt>Release</dt><dd><a href={r.url}>Notes on GitHub</a></dd>
+          </dl>
+        </div>
+        <div class="reveal">
+          <span class="kicker">What's changed · {r.applied.length} patches</span>
+          <div class="patch-chips">{r.applied.map((p) => <span>{p}</span>)}</div>
+          {r.failed.length > 0 && <p class="note" style="margin-top:16px">Not applied in this build: {r.failed.join(", ")}</p>}
+        </div>
+      </div>
+    </section>
   )}
 
   {app.older.length > 0 && (
-    <>
-      <h2>Older versions</h2>
-      <div class="card scroll">
-        <table>
-          <tbody>
-            {app.older.map((o) => (
-              <tr>
-                <td>{o.version}</td>
-                <td>patches {o.patchesVersion}</td>
-                <td>{day(o.date)}</td>
-                <td>{o.assets.map((a) => <a href={a.url} style="margin-right:10px">{a.arch}</a>)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <section style="padding-top:20px">
+      <div class="wrap reveal">
+        <span class="kicker">Older versions</span>
+        <div class="scroll-x">
+          <table class="versions">
+            <tbody>
+              {app.older.map((o) => (
+                <tr>
+                  <td>{o.version}</td>
+                  <td class="muted">patches {o.patchesVersion}</td>
+                  <td class="muted">{day(o.date)}</td>
+                  <td>{o.assets.map((a) => <a href={a.url} style="margin-right:12px">{a.arch}</a>)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </>
+    </section>
   )}
 
-  <p style="margin-top:32px"><a href={`${repoUrl}/releases?q=${app.id}`}>All {app.name} releases on GitHub →</a></p>
+  <section style="padding-top:20px">
+    <div class="wrap">
+      <p><a href={`${repoUrl}/releases?q=${app.id}`}>All {app.name} releases on GitHub →</a></p>
+    </div>
+  </section>
 </Base>

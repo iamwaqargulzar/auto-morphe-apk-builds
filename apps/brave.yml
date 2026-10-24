@@ -1,0 +1,14 @@
+name: Brave
+package: com.brave.browser
+source: kveld
+enabled: true
+order: 9
+version: auto
+arches: [arm64-v8a, armeabi-v7a]
+include: []
+# Unlocks switches of a separate Brave offering; left out to be safe.
+exclude:
+  - "Brave Origin"
+about: >-
+  Brave browser without sponsored start-page content, promo notifications or
+  usage analytics, with less background battery drain and a smaller install.

@@ -1,0 +1,5 @@
+# Brave privacy / debloat patches.
+name: kveld
+patches:
+  repo: kveld9/kveld-morphe-patches
+  asset: '^patches-.*\.mpp$'

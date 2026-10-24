@@ -1,0 +1,16 @@
+name: YouTube Music
+package: com.google.android.apps.youtube.music
+source: morphe
+enabled: true
+order: 2
+version: auto
+# Recent versions are marked experimental by the patch authors; the stable
+# ones are too old to fetch from Google Play by version code.
+experimental: true
+arches: [arm64-v8a, armeabi-v7a]
+include: []
+exclude: []
+about: >-
+  YouTube Music without ads, with background play, SponsorBlock for music
+  videos, downloads, third-party lyrics, crossfade and Android Auto support.
+microg: true

@@ -41,15 +41,30 @@ function morphe(tools: Tools, args: string[], quiet = true) {
 
 /**
  * Versions the patches support for a package, best first: most compatible
- * patches, then newest. Parsed from `list-versions` output lines like
- * "\t21.20.405 (104 patches)".
+ * patches, then newest.
  */
-export async function supportedVersions(tools: Tools, pkg: string, experimental = false): Promise<{ version: string; patches: number }[]> {
+export interface SupportedVersion {
+  version: string;
+  patches: number;
+  // Google Play version codes per CPU type, when the patch authors list them.
+  codes: Partial<Record<Arch, number>>;
+}
+
+const ABI_NAMES: Record<string, Arch> = { ARM64_V8A: "arm64-v8a", ARMEABI_V7A: "armeabi-v7a" };
+
+export async function supportedVersions(tools: Tools, pkg: string, experimental = false): Promise<SupportedVersion[]> {
   const res = await morphe(tools, ["list-versions", "--patches", tools.patches, "-f", pkg, ...(experimental ? ["-x"] : [])]);
   if (res.code !== 0) throw new Error(`list-versions failed:\n${res.stderr || res.stdout}`);
-  const out: { version: string; patches: number }[] = [];
-  for (const m of res.stdout.matchAll(/^\s+(\S+) \((\d+) patch(?:es)?\)/gm)) {
-    out.push({ version: m[1]!, patches: Number(m[2]) });
+  // Lines look like "\t452.1.0.53.64 [versionCodes: ARM64_V8A=385811006] (109 patches)".
+  const out: SupportedVersion[] = [];
+  for (const m of res.stdout.matchAll(/^\s+(\S+)(?: \[versionCodes: ([^\]]+)\])? \((\d+) patch(?:es)?\)/gm)) {
+    const codes: Partial<Record<Arch, number>> = {};
+    for (const pair of (m[2] ?? "").split(/,\s*/)) {
+      const [abi, code] = pair.split("=");
+      const arch = abi ? ABI_NAMES[abi.trim()] : undefined;
+      if (arch && code) codes[arch] = Number(code);
+    }
+    out.push({ version: m[1]!, patches: Number(m[3]), codes });
   }
   return out.sort((a, b) => b.patches - a.patches || compareVersions(b.version, a.version));
 }

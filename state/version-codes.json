@@ -1,4 +1,11 @@
 {
+  "com.brave.browser": {
+    "1.97.59": 429705904
+  },
+  "com.google.android.apps.youtube.music": {
+    "9.42.52": 94252240,
+    "9.42.52@armeabi-v7a": 94252230
+  },
   "com.google.android.youtube": {
     "20.26.40": 1555432896,
     "21.20.405": 1561173354,
@@ -6,8 +13,29 @@
     "21.42.243": 1561304941,
     "21.43.523": 1561307650
   },
+  "com.instagram.android": {
+    "452.1.0.53.64": 385811006,
+    "452.1.0.53.64@armeabi-v7a": 385811005
+  },
+  "com.instagram.barcelona": {
+    "452.0.0.50.64": 512207626,
+    "452.0.0.50.64@armeabi-v7a": 512207640
+  },
   "com.reddit.frontpage": {
     "2024.20.3": 1624970,
     "2026.42.0": 2642020
+  },
+  "com.twitter.android": {
+    "12.35.0-prod.01": 312350001,
+    "12.36.1-prod.01": 312361001,
+    "12.36.1-prod.01@armeabi-v7a": 312361001
+  },
+  "com.zhiliaoapp.musically": {
+    "47.4.3": 2024704030,
+    "47.4.3@armeabi-v7a": 2024704030
+  },
+  "org.telegram.messenger": {
+    "13.1.0": 72291,
+    "13.1.1@armeabi-v7a": 72371
   }
 }

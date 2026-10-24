@@ -1,5 +1,6 @@
-import { writeFile } from "node:fs/promises";
-import { join } from "node:path";
+import { stat, writeFile } from "node:fs/promises";
+import { basename, join } from "node:path";
+import { apkInfo, sha256 } from "./apkinfo.ts";
 import { ROOT, type App, type Arch } from "./config.ts";
 import type { PatchResult, Tools } from "./morphe.ts";
 import { log, run, runOk } from "./util.ts";
@@ -8,6 +9,53 @@ export interface Build {
   arch: Arch;
   apk: string;
   result: PatchResult;
+}
+
+/**
+ * build.json, attached to every release: what the portal and the updater app
+ * read. The installed package can differ from the Play one (patched YouTube
+ * installs as app.morphe.android.youtube), and versionCode may be forced to
+ * the maximum by a patch, so the updater compares versionName + build id.
+ */
+export interface BuildManifest {
+  schema: 1;
+  build: string;
+  app: string;
+  name: string;
+  package: string;
+  originalPackage: string;
+  versionName: string;
+  versionCode: number;
+  builtAt: string;
+  patches: { repo: string; version: string; applied: string[]; failed: string[] };
+  files: Partial<Record<Arch, { name: string; size: number; sha256: string }>>;
+}
+
+async function buildManifest(app: App, tag: string, tools: Tools, builds: Build[], patchesRepo: string): Promise<BuildManifest> {
+  const info = await apkInfo(builds[0]!.apk);
+  const files: BuildManifest["files"] = {};
+  for (const b of builds) {
+    files[b.arch] = { name: basename(b.apk), size: (await stat(b.apk)).size, sha256: await sha256(b.apk) };
+  }
+  const result = builds[0]!.result;
+  return {
+    schema: 1,
+    build: tag,
+    app: app.id,
+    name: app.name,
+    package: info.package,
+    originalPackage: app.package,
+    versionName: info.versionName,
+    versionCode: info.versionCode,
+    builtAt: new Date().toISOString(),
+    patches: {
+      repo: patchesRepo,
+      version: tools.patchesVersion,
+      applied: result.appliedPatches,
+      failed: result.failedPatches.map((p) => p.name ?? p.patch ?? "unknown"),
+    },
+    files,
+  };
 }
 
 export function releaseTag(app: App, version: string, tools: Tools): string {
@@ -56,11 +104,14 @@ export async function publishRelease(opts: {
   tools: Tools;
   builds: Build[];
   workDir: string;
+  patchesRepo: string;
 }): Promise<string> {
-  const { repo, app, version, tools, builds, workDir } = opts;
+  const { repo, app, version, tools, builds, workDir, patchesRepo } = opts;
   const tag = releaseTag(app, version, tools);
   const notesFile = join(workDir, "notes.md");
   await writeFile(notesFile, notes(app, version, tools, builds));
+  const manifestFile = join(workDir, "build.json");
+  await writeFile(manifestFile, `${JSON.stringify(await buildManifest(app, tag, tools, builds, patchesRepo), null, 2)}\n`);
   log(`Creating release ${tag} on ${repo}`);
   const res = await runOk("gh", [
     "release", "create", tag,
@@ -68,6 +119,7 @@ export async function publishRelease(opts: {
     "--title", `${app.name} ${version} (patches ${tools.patchesVersion})`,
     "--notes-file", notesFile,
     ...builds.map((b) => b.apk),
+    manifestFile,
     join(ROOT, "NOTICE"),
   ], { quiet: true });
   return res.stdout.trim();

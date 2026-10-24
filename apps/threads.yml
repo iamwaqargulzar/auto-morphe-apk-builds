@@ -1,0 +1,13 @@
+name: Threads
+package: com.instagram.barcelona
+source: hushthreads
+enabled: true
+order: 6
+version: auto
+arches: [arm64-v8a, armeabi-v7a]
+include: []
+exclude: []
+about: >-
+  Threads without ads, suggested users or analytics, with photo and video
+  saving, best image quality, links that open in your browser and a pure
+  black dark mode.

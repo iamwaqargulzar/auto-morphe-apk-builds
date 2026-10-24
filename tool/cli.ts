@@ -2,11 +2,11 @@ import { mkdir, rename, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { parseArgs } from "node:util";
 import { ROOT, loadApp, loadApps, loadSource, type App, type Arch } from "./config.ts";
-import { fetchTools, patch, supportedVersions, type Signing, type Tools } from "./morphe.ts";
+import { fetchTools, patch, supportedVersions, type Signing, type SupportedVersion, type Tools } from "./morphe.ts";
 import { writeCatalog } from "./catalog.ts";
-import { downloadFromPlay } from "./play.ts";
+import { NotOnPlayError, downloadFromPlay } from "./play.ts";
 import { deleteRelease, publishRelease, releaseExists, releaseTag, type Build } from "./release.ts";
-import { log } from "./util.ts";
+import { log, runOk } from "./util.ts";
 import { mergeVersionCodes } from "./versioncodes.ts";
 
 const USAGE = `Usage:
@@ -39,13 +39,16 @@ async function signingFromEnv(): Promise<Signing> {
   };
 }
 
-async function resolveVersion(app: App, tools: Tools): Promise<string> {
-  if (app.version !== "auto") return app.version;
+async function resolveVersion(app: App, tools: Tools): Promise<SupportedVersion> {
+  if (app.version !== "auto") {
+    const listed = (await supportedVersions(tools, app.package, true)).find((v) => v.version === app.version);
+    return listed ?? { version: app.version, patches: 0, codes: {} };
+  }
   const versions = await supportedVersions(tools, app.package, app.experimental);
   const best = versions[0];
   if (!best) throw new Error(`Patches ${tools.patchesVersion} list no supported versions for ${app.package}`);
   log(`Supported versions: ${versions.map((v) => `${v.version} (${v.patches})`).join(", ")}`);
-  return best.version;
+  return best;
 }
 
 async function build(appId: string, opts: { force: boolean; release: boolean; repo?: string }): Promise<void> {
@@ -58,7 +61,8 @@ async function build(appId: string, opts: { force: boolean; release: boolean; re
   const tools = await fetchTools(source);
   log(`Patcher ${tools.cliVersion}, patches ${source.patches.repo}@${tools.patchesVersion}`);
 
-  const version = await resolveVersion(app, tools);
+  const target = await resolveVersion(app, tools);
+  const version = target.version;
   const tag = releaseTag(app, version, tools);
   log(`${app.name}: target version ${version} (tag ${tag})`);
 
@@ -79,24 +83,53 @@ async function build(appId: string, opts: { force: boolean; release: boolean; re
   const builds: Build[] = [];
   for (const [i, arch] of app.arches.entries()) {
     try {
-      builds.push(await buildArch(app, arch, version, tools, signing, join(workRoot, arch), outDir));
+      builds.push(await buildArch(app, arch, version, target.codes[arch], tools, signing, join(workRoot, arch), outDir));
     } catch (err) {
       // The first CPU type is required; the others are best effort.
+      if (i === 0 && err instanceof NotOnPlayError) {
+        log(`Skipping ${app.name} for now: ${err.message}`);
+        if (process.env.GITHUB_ACTIONS) console.log(`::notice title=${app.name} waiting for Google Play::${err.message}`);
+        return;
+      }
       if (i === 0) throw err;
       log(`WARNING: skipping ${arch}: ${(err as Error).message.split("\n")[0]}`);
     }
   }
 
   if (opts.release && repo) {
-    const url = await publishRelease({ repo, app, version, tools, builds, workDir: workRoot });
+    const url = await publishRelease({ repo, app, version, tools, builds, workDir: workRoot, patchesRepo: source.patches.repo });
     log(`Released: ${url}`);
   }
 }
 
-async function buildArch(app: App, arch: Arch, version: string, tools: Tools, signing: Signing, workDir: string, outDir: string): Promise<Build> {
+/** CPU types with native code in an .apk (lib/<abi>/) or .apks bundle (split_config.<abi>.apk). */
+async function abisIn(file: string): Promise<Set<string>> {
+  const { stdout } = await runOk("unzip", ["-Z1", file], { quiet: true });
+  const abis = new Set<string>();
+  for (const line of stdout.split("\n")) {
+    const m = line.match(/^lib\/([^/]+)\//) ?? line.match(/^split_config\.(arm64_v8a|armeabi_v7a|x86_64|x86)\.apk$/);
+    if (m) abis.add(m[1]!.replace(/_/g, "-").replace("x86-64", "x86_64"));
+  }
+  return abis;
+}
+
+async function buildArch(
+  app: App,
+  arch: Arch,
+  version: string,
+  codeHint: number | undefined,
+  tools: Tools,
+  signing: Signing,
+  workDir: string,
+  outDir: string,
+): Promise<Build> {
   log(`--- ${app.name} ${version} ${arch} ---`);
   await mkdir(workDir, { recursive: true });
-  const input = await downloadFromPlay(app, arch, version, workDir);
+  const input = await downloadFromPlay(app, arch, version, workDir, codeHint);
+  const abis = await abisIn(input);
+  if (abis.size && !abis.has(arch)) {
+    throw new Error(`Download has native code for ${[...abis].join(", ")} only, not ${arch}`);
+  }
   const patched = join(workDir, "patched.apk");
   const result = await patch(tools, app, arch, input, patched, signing);
 

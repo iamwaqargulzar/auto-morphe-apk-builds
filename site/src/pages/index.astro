@@ -4,68 +4,84 @@ import Downloads from "../components/Downloads.astro";
 import { appUrl, catalog, day, lastBuild, microgUrl, project, repoUrl, requestUrl } from "../lib";
 
 const apps = catalog.apps;
+const built = apps.filter((a) => a.latest);
 const names = new Intl.ListFormat("en", { type: "conjunction" }).format(apps.map((a) => a.name));
-const title = `${project.name}: patched ${names} APKs, rebuilt automatically`;
-const description = `Free patched Android APKs for ${names}, built daily from the official Google Play app with community patches, signed with one stable key and installable with auto-updates via Obtainium.`;
+const patchTotal = built.reduce((n, a) => n + (a.latest?.applied.length ?? 0), 0);
+const downloads = apps.reduce((n, a) => n + a.totalDownloads, 0);
+const updater = catalog.updater;
+const title = `${project.name}: ad-free patched ${apps.slice(0, 4).map((a) => a.name).join(", ")} & more for Android`;
+const description = `Free, non-root patched APKs of ${names}, rebuilt automatically from the official Google Play apps, signed with one key and kept up to date by the Auto Murph app.`;
+const iconApps = built.filter((a) => a.icon);
+const phoneApps = built.slice(0, 5);
+const fmt = (n: number) => (n >= 1000 ? `${(n / 1000).toFixed(n >= 10000 ? 0 : 1)}k` : `${n}`);
+const downloadIcon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M6 19.5h12"/></svg>`;
+const check = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>`;
 
 const faq: { q: string; a: string }[] = [
   {
-    q: "What is Auto Murph APK Builds?",
-    a: `A free, open-source project that downloads official Android apps from Google Play, applies community patches with the Morphe patcher (for example ad blocking and extra settings) and publishes the result as ready-to-install APK files. Everything runs on GitHub Actions; the build scripts and logs are public.`,
+    q: `What is ${project.name}?`,
+    a: `A free, open-source project that takes official Android apps from Google Play, applies community patches (no ads, extra settings, privacy fixes) and publishes ready-to-install APKs. Every build runs in public on GitHub Actions, and the Auto Murph app installs them and keeps them updated.`,
   },
   {
-    q: "Which APK file should I download?",
-    a: "Pick arm64-v8a for almost any phone made since about 2017. Pick armeabi-v7a only for older or budget phones with a 32-bit processor. If you are unsure, install the free app 'CPU-Z' or 'Droid Hardware Info' and look for the instruction set, or just try arm64-v8a first; Android refuses to install the wrong one.",
-  },
-  {
-    q: "Do I need root?",
-    a: "No. These are non-root builds that install like any other APK on an unmodified phone.",
-  },
-  {
-    q: "Why does YouTube need MicroG-RE?",
-    a: "Patched YouTube can't use Google Play Services directly because it is signed with a different key. MicroG-RE is a small open-source replacement that handles Google sign-in and notifications. Install it once, then sign in to YouTube as usual. Without it, YouTube works signed out.",
-  },
-  {
-    q: "Can I install it over the official app?",
-    a: "Not for YouTube: the patched build uses a different package name, so it installs alongside the official app. For apps that keep the original package name (such as Reddit), uninstall the Play Store version first, because Android only updates an app with an APK signed by the same key.",
+    q: "Which file should I download: 64-bit or 32-bit?",
+    a: "Choose 64-bit (arm64-v8a) for almost any phone made since about 2017. Choose 32-bit (armeabi-v7a) only for older or budget phones. The Auto Murph app picks the right one for you automatically.",
   },
   {
     q: "How do updates work?",
-    a: "Every day the build checks whether the patches or the supported app version changed and publishes a new release if so. Use Obtainium to get notified and update in one tap, or check this page.",
+    a: "A build runs every day. When the patches or the supported app version change, a new release appears. The Auto Murph app checks every 6 hours, notifies you and updates with one tap (on Android 12 and newer, without a confirmation prompt for apps it installed).",
+  },
+  { q: "Do I need root?", a: "No. Everything installs like a normal app on an unmodified phone." },
+  {
+    q: "Why do YouTube and YouTube Music need MicroG-RE?",
+    a: "The patched apps are signed with a different key, so Google Play Services won't sign them in. MicroG-RE is a small open-source stand-in that handles Google sign-in. Without it the apps work signed out.",
+  },
+  {
+    q: "Can I install over the Play Store version?",
+    a: "YouTube and YouTube Music install alongside the official apps. The others keep their original package name, so uninstall the Play Store version first; Android only updates an app with an APK signed by the same key. The Auto Murph app detects this and offers to remove the other version.",
   },
   {
     q: "Is it safe?",
-    a: `The original APK comes straight from Google Play, the patches are open source, and every build runs in public on GitHub Actions. Each APK is signed with the same certificate (SHA-256 ${project.certSha256}); you can check it with apksigner or the 'App Manager' app before installing. As with any modified app, use an account you are comfortable using with it.`,
+    a: `The original APK comes straight from Google Play, the patches are open source, every build runs with public logs, and every file is signed with the same certificate (SHA-256 ${project.certSha256}). The Auto Murph app checks each download's SHA-256 checksum before installing.`,
+  },
+  {
+    q: "Do you unlock paid features?",
+    a: "No. Patches that unlock paid subscriptions are left out (for example X Premium features). The builds focus on ads, clutter, privacy and quality-of-life options. Removing ads may still go against a service's terms.",
   },
   {
     q: "Is this legal?",
-    a: "This is not legal advice. The patches are open source (GPLv3) and their license notice ships with every release, and the original apps are free downloads. Using a modified client can go against a service's terms of service, so decide for yourself whether that is acceptable for your account.",
+    a: "This is not legal advice. The patches are GPLv3 and their notice ships with every release, and the original apps are free. Using a modified client can go against a service's terms of service, so decide for yourself.",
   },
   {
     q: "Can I request another app?",
-    a: "Yes. Open the request form on GitHub with the app name or Play Store link. Requests are reviewed, and apps are added when a maintained patch set supports them.",
+    a: "Yes. Open the request form on GitHub with the app name or Play Store link. Apps are added when a maintained patch set supports them without unlocking paid features.",
   },
 ];
 
 const jsonLd = [
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: project.name,
-    url: project.site,
-    description,
-  },
-  ...apps.map((a) => ({
+  { "@context": "https://schema.org", "@type": "WebSite", name: project.name, url: project.site, description },
+  ...(updater
+    ? [{
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        name: "Auto Murph",
+        operatingSystem: "Android",
+        applicationCategory: "UtilitiesApplication",
+        softwareVersion: updater.versionName,
+        downloadUrl: updater.url,
+        description: "Installs the patched apps and keeps them up to date.",
+        offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+      }]
+    : []),
+  ...built.map((a) => ({
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    name: `${a.name} (patched by ${project.name})`,
+    name: `${a.name} (patched)`,
     operatingSystem: "Android",
     applicationCategory: "MultimediaApplication",
     softwareVersion: a.latest?.version,
     datePublished: a.latest?.date,
     description: a.about,
     url: new URL(appUrl(a), project.site).toString(),
-    downloadUrl: a.latest?.assets[0]?.url,
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
   })),
   {
@@ -74,94 +90,229 @@ const jsonLd = [
     mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
   },
 ];
+
+const orbitPos = [
+  "top:4%;left:2%;width:62px;height:62px;animation-delay:-1s",
+  "top:16%;right:-2%;width:54px;height:54px;animation-delay:-3s",
+  "bottom:16%;left:-2%;width:56px;height:56px;animation-delay:-2s",
+  "bottom:3%;right:6%;width:64px;height:64px;animation-delay:-4s",
+];
 ---
 <Base title={title} description={description} path="/" jsonLd={jsonLd}>
-  <section>
-    <h1>Patched {names} for Android, rebuilt automatically</h1>
-    <p class="lead">
-      Free, non-root APKs built from the official Google Play apps with open-source patches: no ads, more settings,
-      one stable signing key and one-tap updates through Obtainium.
-    </p>
-    <p class="muted" style="margin-top:12px">
-      {lastBuild ? <>Last build: {day(lastBuild)} · </> : null}Builds run daily on <a href={`${repoUrl}/actions`}>GitHub Actions</a>
-    </p>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow reveal"><span class="dot"></span>{lastBuild ? `Last build ${day(lastBuild)}` : "Builds daily"} · {built.length} apps live</span>
+        <h1 class="display reveal">Your favourite apps.<br /><span class="grad-text">Minus the noise.</span></h1>
+        <p class="lead reveal">
+          Ad-free, privacy-tuned builds of {names}, made from the official Google Play apps and kept up to date by our
+          own Android app. No root. No accounts. Free.
+        </p>
+        <div class="hero-ctas reveal">
+          {updater && (
+            <a class="btn grad" href={updater.url}>
+              <Fragment set:html={downloadIcon} />Get Auto Murph <small style="opacity:.85">{updater.versionName} · {(updater.size / 1e6).toFixed(1)} MB</small>
+            </a>
+          )}
+          <a class="btn" href="#apps">Browse the apps</a>
+        </div>
+        <div class="stats reveal">
+          <div class="stat"><b>{built.length}</b><span>apps</span></div>
+          <div class="stat"><b>{patchTotal}</b><span>patches applied</span></div>
+          <div class="stat"><b>Daily</b><span>rebuilds</span></div>
+          <div class="stat">{downloads ? <><b>{fmt(downloads)}</b><span>downloads</span></> : <><b>Free</b><span>no sign-up</span></>}</div>
+        </div>
+      </div>
+
+      <div class="phone-wrap reveal" aria-hidden="true">
+        <div class="phone-glow"></div>
+        {iconApps.slice(0, 4).map((a, i) => (
+          <div class="orbit" style={orbitPos[i]}><img src={a.icon!} alt="" width="64" height="64" /></div>
+        ))}
+        <div class="phone">
+          <div class="screen">
+            <div class="notch"></div>
+            <div class="head">
+              <b>Auto Murph</b>
+              <small>Patched apps, kept up to date</small>
+              <div class="chips">
+                <div><b>{built.length}</b>apps</div>
+                <div><b>{Math.min(3, built.length)}</b>installed</div>
+                <div><b>1</b>update</div>
+              </div>
+              <div class="update-all">Update 1 app</div>
+            </div>
+            {phoneApps.map((a, i) => (
+              <div class="row">
+                {a.icon && <img src={a.icon} alt="" width="36" height="36" />}
+                <div class="t">
+                  <b>{a.name}</b>
+                  <span>v{a.latest!.version} · {a.latest!.applied.length} patches</span>
+                  {i === 1 && <div class="bar"><i></i></div>}
+                </div>
+                <span class={`pill ${i === 0 || i === 2 ? "pill-ok" : i === 1 ? "pill-up" : "pill-get"}`}>
+                  {i === 0 || i === 2 ? "Up to date" : i === 1 ? "Updating" : "Get"}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {iconApps.length > 0 && (
+      <div class="wrap" style="margin-top:56px">
+        <div class="marquee" aria-hidden="true">
+          <div class="marquee-track">
+            {[...iconApps, ...iconApps, ...iconApps, ...iconApps].map((a) => <img src={a.icon!} alt="" width="60" height="60" loading="lazy" />)}
+          </div>
+        </div>
+      </div>
+    )}
   </section>
 
-  <h2 id="apps">Apps</h2>
-  <div class="grid">
-    {
-      apps.map((a) => (
-        <article class="card">
-          <div class="row" style="margin-bottom:10px">
-            {a.icon && <img src={a.icon} width="48" height="48" alt={`${a.name} icon`} style="border-radius:12px" />}
-            <div>
-              <h3><a href={appUrl(a)} style="color:inherit;text-decoration:none">{a.name}</a></h3>
-              <span class="pill">{a.latest ? `v${a.latest.version}` : "not built yet"}</span>
-              {a.latest && <span class="pill">{a.latest.applied.length} patches</span>}
+  <section id="apps">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">The catalog</span>
+        <h2 class="h2">Every app, rebuilt for you.</h2>
+        <p>Download directly, or let the Auto Murph app pick the right file and keep it updated. Each app page lists every patch applied.</p>
+      </div>
+      <div class="apps-grid">
+        {apps.map((a) => (
+          <article class="card spot app-card reveal">
+            <div class="app-top">
+              {a.icon && <img src={a.icon} alt={`${a.name} icon`} width="58" height="58" loading="lazy" />}
+              <div>
+                <h3><a href={appUrl(a)}>{a.name}</a></h3>
+                <div class="tags">
+                  {a.latest ? <span class="tag">v{a.latest.version}</span> : <span class="tag warn">coming soon</span>}
+                  {a.latest && <span class="tag accent">{a.latest.applied.length} patches</span>}
+                  {a.microg && <span class="tag">needs MicroG-RE</span>}
+                </div>
+              </div>
             </div>
-          </div>
-          <p class="muted" style="margin:0 0 14px;font-size:15px">{a.about}</p>
-          <Downloads app={a} />
-          {a.microg && (
-            <p style="font-size:14px;margin:10px 0 0">
-              Needs <a href={microgUrl}>MicroG-RE</a> to sign in with Google.
-            </p>
+            <p>{a.about}</p>
+            <Downloads app={a} compact />
+            <div class="app-foot">
+              <span>{a.latest ? `Built ${day(a.latest.date)}` : `Patches: ${a.source.repo}`}</span>
+              <a href={appUrl(a)}>Details →</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="app">
+    <div class="wrap split">
+      <div class="reveal">
+        <span class="kicker">The Auto Murph app</span>
+        <h2 class="h2">One app to install<br />and update them all.</h2>
+        <p class="lead" style="margin-top:16px">
+          Auto Murph lists every patched app, knows what's installed on your phone and updates with one tap. It's under 2 MB,
+          open source, and signed with the same key as every build.
+        </p>
+        <div class="hero-ctas">
+          {updater ? (
+            <a class="btn grad" href={updater.url}><Fragment set:html={downloadIcon} />Download Auto Murph {updater.versionName}</a>
+          ) : (
+            <span class="btn" aria-disabled="true">First release coming soon</span>
           )}
-          <p style="font-size:14px;margin:10px 0 0"><a href={appUrl(a)}>Details, patch list and older versions →</a></p>
-        </article>
-      ))
-    }
-  </div>
+          <a class="btn" href={`${repoUrl}/tree/main/updater`}>View source</a>
+        </div>
+      </div>
+      <div class="features">
+        <div class="card spot feature reveal">
+          <div class="ico"><Fragment set:html={downloadIcon} /></div>
+          <h3>One-tap installs</h3>
+          <p>Picks the right file for your phone's CPU automatically: no guessing between 64-bit and 32-bit.</p>
+        </div>
+        <div class="card spot feature reveal">
+          <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0" /></svg></div>
+          <h3>Update alerts</h3>
+          <p>Checks every 6 hours in the background and notifies you once per new build. Wi-Fi only, if you prefer.</p>
+        </div>
+        <div class="card spot feature reveal">
+          <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v6c0 4.4 3 7.6 7 9 4-1.4 7-4.6 7-9V6z" /><path d="m9 12 2 2 4-4" /></svg></div>
+          <h3>Verified downloads</h3>
+          <p>Every APK's SHA-256 checksum is checked before install, and installed apps are matched to our signing certificate.</p>
+        </div>
+        <div class="card spot feature reveal">
+          <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8M21 3v5h-5" /></svg></div>
+          <h3>Silent updates</h3>
+          <p>On Android 12+, apps installed by Auto Murph update without a confirmation prompt. It updates itself too.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <h2 id="install">How to install</h2>
-  <div class="card">
-    <ol class="steps">
-      <li>Download the <strong>arm64-v8a</strong> APK for your app (or armeabi-v7a on an older 32-bit phone).</li>
-      <li>Open the file on your phone. If Android asks, allow your browser or file manager to <em>install unknown apps</em>.</li>
-      <li>For <strong>YouTube</strong>: also install <a href={microgUrl}>MicroG-RE</a> if you want to sign in with your Google account.</li>
-      <li>For apps that keep their original name (like <strong>Reddit</strong>): uninstall the Play Store version first.</li>
-      <li>Optional: add the app to <a href="https://obtainium.imranr.dev">Obtainium</a> (button above) to get updates automatically.</li>
-    </ol>
-  </div>
+  <section id="how">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">How it works</span>
+        <h2 class="h2">Built in public, every day.</h2>
+        <p>No mirrors, no mystery files. The whole pipeline runs on GitHub Actions with logs anyone can read.</p>
+      </div>
+      <div class="pipeline">
+        <div class="card spot step reveal"><span class="n">01</span><h3>Pick the version</h3><p>Finds the newest app version the current patches fully support.</p></div>
+        <div class="card spot step reveal"><span class="n">02</span><h3>Download from Google Play</h3><p>Fetches the original APK and its splits straight from Google, for 64-bit and 32-bit phones.</p></div>
+        <div class="card spot step reveal"><span class="n">03</span><h3>Patch & sign</h3><p>Applies the open-source patches, strips unused CPU code and signs with one stable key.</p></div>
+        <div class="card spot step reveal"><span class="n">04</span><h3>Release</h3><p>Publishes to GitHub Releases with checksums; this site and the app pick it up within minutes.</p></div>
+      </div>
+    </div>
+  </section>
 
-  <h2 id="obtainium">Automatic updates with Obtainium</h2>
-  <div class="card">
-    <p style="margin-top:0">
-      <a href="https://obtainium.imranr.dev">Obtainium</a> is a free Android app that installs updates straight from the source.
-      Tap <strong>Add to Obtainium</strong> on any app above, or import every app at once:
-    </p>
-    <ol class="steps">
-      <li>In Obtainium, open <strong>Import/Export</strong> and choose <strong>Import from URL</strong>.</li>
-      <li>Paste <code>{new URL("/obtainium.json", project.site).toString()}</code> and confirm.</li>
-    </ol>
-    <p class="muted" style="margin-bottom:0">The import uses the arm64-v8a files. On a 32-bit phone, add apps one by one from their detail pages instead.</p>
-  </div>
+  <section id="trust">
+    <div class="wrap split">
+      <div class="reveal">
+        <span class="kicker">Trust, but verify</span>
+        <h2 class="h2">Know exactly what you install.</h2>
+        <ul class="checks" style="margin-top:24px">
+          <li><Fragment set:html={check} /><span><b>Original from Google Play.</b> No third-party APK mirrors.</span></li>
+          <li><Fragment set:html={check} /><span><b>Open-source patches</b>, listed one by one on every app page.</span></li>
+          <li><Fragment set:html={check} /><span><b>Public build logs</b> on <a href={`${repoUrl}/actions`}>GitHub Actions</a>.</span></li>
+          <li><Fragment set:html={check} /><span><b>No paid-feature unlocks.</b> Subscription bypass patches are left out.</span></li>
+        </ul>
+      </div>
+      <div class="card reveal">
+        <p class="muted" style="margin-top:0">Every APK is signed with this certificate. Check it with <code>apksigner verify --print-certs</code> before installing:</p>
+        <div class="fingerprint">SHA-256<br />{project.certSha256}</div>
+        <p class="faint" style="margin-bottom:0;font-size:14px">If the fingerprint doesn't match, don't install the file.</p>
+      </div>
+    </div>
+  </section>
 
-  <h2 id="verify">Verify a download</h2>
-  <div class="card">
-    <p style="margin-top:0">Every APK is signed with the same certificate. Its SHA-256 fingerprint is:</p>
-    <p class="mono">{project.certSha256}</p>
-    <p class="muted" style="margin-bottom:0">
-      Check it with <code>apksigner verify --print-certs file.apk</code> on a computer, or with the App Manager app on Android.
-      If the fingerprint differs, don't install the file.
-    </p>
-  </div>
+  <section id="faq">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">FAQ</span>
+        <h2 class="h2">Questions, answered.</h2>
+      </div>
+      <div class="faq">
+        {faq.map((f) => (
+          <details class="reveal">
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+      <p class="muted" style="margin-top:22px">
+        Google sign-in for YouTube and YouTube Music needs <a href={microgUrl}>MicroG-RE</a>. More questions? <a href={`${repoUrl}/issues`}>Open an issue</a>.
+      </p>
+    </div>
+  </section>
 
-  <h2 id="faq">Frequently asked questions</h2>
-  <div class="card">
-    {faq.map((f) => (
-      <details>
-        <summary>{f.q}</summary>
-        <p>{f.a}</p>
-      </details>
-    ))}
-  </div>
-
-  <h2 id="request">Request an app</h2>
-  <div class="card">
-    <p style="margin-top:0">
-      Want another app? <a href={requestUrl}>Open a request on GitHub</a> with the app name or its Play Store link.
-      Apps are added when a maintained patch set supports them.
-    </p>
-  </div>
+  <section>
+    <div class="wrap">
+      <div class="cta-band reveal">
+        <h2 class="h2">Missing an app?</h2>
+        <p class="lead" style="margin:14px auto 0">Request it on GitHub. If a maintained patch set supports it, it joins the daily builds.</p>
+        <div class="hero-ctas">
+          <a class="btn primary" href={requestUrl}>Request an app</a>
+          <a class="btn" href={repoUrl}>Star on GitHub</a>
+        </div>
+      </div>
+    </div>
+  </section>
 </Base>

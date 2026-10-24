@@ -1,5 +1,6 @@
 ---
-import { project, repoUrl, requestUrl } from "../lib";
+import "../styles/global.css";
+import { catalog, project, repoUrl, requestUrl } from "../lib";
 
 interface Props {
   title: string;
@@ -9,6 +10,7 @@ interface Props {
 }
 const { title, description, path, jsonLd = [] } = Astro.props;
 const canonical = new URL(path, project.site).toString();
+const updaterUrl = catalog.updater?.url;
 ---
 <!doctype html>
 <html lang="en">
@@ -19,7 +21,8 @@ const canonical = new URL(path, project.site).toString();
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#07070b" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#fbfbfd" media="(prefers-color-scheme: light)" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={project.name} />
     <meta property="og:title" content={title} />
@@ -28,98 +31,66 @@ const canonical = new URL(path, project.site).toString();
     <meta property="og:image" content={new URL("/og.png", project.site).toString()} />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="alternate" type="text/plain" href="/llms.txt" title="Plain-text summary for AI assistants" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400..800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
     {jsonLd.map((d) => <script type="application/ld+json" set:html={JSON.stringify(d)} />)}
-    <style is:global>
-      :root {
-        --bg: #f7f7f5;
-        --surface: #ffffff;
-        --text: #1b1b1f;
-        --muted: #5d5d66;
-        --line: #e3e3e0;
-        --accent: #0f766e;
-        --accent-text: #ffffff;
-        --warn-bg: #fff7e6;
-        --warn-line: #f0c36d;
-        --radius: 14px;
-      }
-      @media (prefers-color-scheme: dark) {
-        :root {
-          --bg: #111214;
-          --surface: #1a1b1f;
-          --text: #ececf0;
-          --muted: #a1a1ab;
-          --line: #2c2d33;
-          --accent: #2dd4bf;
-          --accent-text: #06201d;
-          --warn-bg: #2a2310;
-          --warn-line: #7a5b17;
-        }
-      }
-      * { box-sizing: border-box; }
-      html { -webkit-text-size-adjust: 100%; }
-      body {
-        margin: 0;
-        background: var(--bg);
-        color: var(--text);
-        font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-      }
-      a { color: var(--accent); }
-      .wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }
-      header.site { border-bottom: 1px solid var(--line); background: var(--surface); }
-      header.site .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 60px; flex-wrap: wrap; }
-      .brand { font-weight: 700; color: var(--text); text-decoration: none; display: flex; gap: 10px; align-items: center; }
-      nav a { margin-left: 16px; color: var(--muted); text-decoration: none; font-size: 15px; }
-      nav a:hover { color: var(--text); }
-      main { padding: 32px 0 56px; }
-      h1 { font-size: clamp(28px, 5vw, 40px); line-height: 1.15; margin: 0 0 12px; letter-spacing: -0.02em; }
-      h2 { font-size: 24px; margin: 48px 0 12px; letter-spacing: -0.01em; }
-      h3 { font-size: 18px; margin: 0 0 6px; }
-      .lead { font-size: 18px; color: var(--muted); max-width: 680px; margin: 0; }
-      .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; }
-      .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr)); }
-      .btn {
-        display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 10px;
-        background: var(--accent); color: var(--accent-text); text-decoration: none; font-weight: 600; font-size: 15px;
-        border: 1px solid transparent;
-      }
-      .btn.ghost { background: transparent; color: var(--text); border-color: var(--line); }
-      .btn small { font-weight: 400; opacity: 0.85; }
-      .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-      .muted { color: var(--muted); }
-      .pill { display: inline-block; font-size: 13px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
-      .note { background: var(--warn-bg); border: 1px solid var(--warn-line); border-radius: 10px; padding: 12px 14px; }
-      code, .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.92em; overflow-wrap: anywhere; }
-      table { border-collapse: collapse; width: 100%; }
-      th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
-      details { border-bottom: 1px solid var(--line); padding: 12px 0; }
-      details summary { cursor: pointer; font-weight: 600; }
-      ol.steps { padding-left: 20px; }
-      ol.steps li { margin-bottom: 8px; }
-      footer.site { border-top: 1px solid var(--line); padding: 24px 0 40px; color: var(--muted); font-size: 14px; }
-      .scroll { overflow-x: auto; }
-    </style>
   </head>
   <body>
-    <header class="site">
+    <div class="aurora" aria-hidden="true"><div class="grid-lines"></div><div class="mid"></div></div>
+    <header class="nav">
       <div class="wrap">
-        <a class="brand" href="/"><img src="/favicon.svg" width="26" height="26" alt="" />{project.name}</a>
-        <nav>
+        <a class="brand" href="/">
+          <span class="brand-mark">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M6 19.5h12" /></svg>
+          </span>
+          {project.name}
+        </a>
+        <nav class="nav-links">
           <a href="/#apps">Apps</a>
-          <a href="/#install">Install</a>
-          <a href="/#faq">FAQ</a>
-          <a href={repoUrl}>GitHub</a>
+          <a href="/#app" class="hide-sm">Updater</a>
+          <a href="/#how" class="hide-sm">How it works</a>
+          <a href="/#faq" class="hide-sm">FAQ</a>
+          <a href={repoUrl} class="hide-sm">GitHub</a>
+          {updaterUrl && <a class="btn sm primary" href={updaterUrl} style="color:var(--bg);margin-left:6px">Get the app</a>}
         </nav>
       </div>
     </header>
-    <main class="wrap"><slot /></main>
-    <footer class="site">
-      <div class="wrap">
-        <p>
-          {project.name} builds patched Android apps automatically on GitHub Actions. It is not affiliated with Google,
-          Reddit or the patch authors. Patched builds use third-party GPLv3 patches; every release includes their NOTICE.
-        </p>
-        <p><a href={repoUrl}>Source code</a> · <a href={`${repoUrl}/releases`}>All releases</a> · <a href={requestUrl}>Request an app</a> · <a href="/obtainium.json">Obtainium import file</a></p>
+    <main><slot /></main>
+    <footer>
+      <div class="wrap cols">
+        <div style="max-width:520px">
+          <div class="brand" style="margin-bottom:10px;color:var(--text)">{project.name}</div>
+          <p style="margin:0">
+            Patched Android apps, built in public on GitHub Actions from the official Google Play releases.
+            Not affiliated with Google, Meta, X, Reddit, Telegram, TikTok, Brave or the patch authors. Released APKs use
+            third-party GPLv3 patches and ship with their NOTICE.
+          </p>
+        </div>
+        <nav>
+          <a href={repoUrl}>Source</a>
+          <a href={`${repoUrl}/releases`}>Releases</a>
+          <a href={`${repoUrl}/actions`}>Build logs</a>
+          <a href={requestUrl}>Request an app</a>
+          <a href="/llms.txt">llms.txt</a>
+        </nav>
       </div>
     </footer>
+    <script>
+      // Fade sections in as they scroll into view.
+      const io = new IntersectionObserver(
+        (entries) => entries.forEach((e) => e.isIntersecting && (e.target.classList.add("in"), io.unobserve(e.target))),
+        { rootMargin: "0px 0px -8% 0px" },
+      );
+      document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+      // Spotlight that follows the cursor on cards.
+      document.querySelectorAll<HTMLElement>(".spot").forEach((el) =>
+        el.addEventListener("pointermove", (e) => {
+          const r = el.getBoundingClientRect();
+          el.style.setProperty("--mx", `${e.clientX - r.left}px`);
+          el.style.setProperty("--my", `${e.clientY - r.top}px`);
+        }),
+      );
+    </script>
   </body>
 </html>

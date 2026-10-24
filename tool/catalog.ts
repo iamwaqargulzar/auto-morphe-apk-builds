@@ -1,6 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { PROJECT, ROOT, loadApps, loadSource, type App, type Arch } from "./config.ts";
+import type { BuildManifest } from "./release.ts";
 import { log } from "./util.ts";
 
 // Builds site/src/data/catalog.json: everything the portal shows, taken from
@@ -22,6 +23,7 @@ export interface CatalogAsset {
   url: string;
   size: number;
   downloads: number;
+  sha256: string | null;
 }
 
 export interface CatalogRelease {
@@ -33,6 +35,9 @@ export interface CatalogRelease {
   assets: CatalogAsset[];
   applied: string[];
   failed: string[];
+  // From build.json (null for releases made before it existed).
+  installedPackage: string | null;
+  versionCode: number | null;
 }
 
 export interface CatalogApp {
@@ -46,7 +51,6 @@ export interface CatalogApp {
   arches: Arch[];
   latest: CatalogRelease | null;
   older: CatalogRelease[];
-  obtainium: Partial<Record<Arch, string>>;
   totalDownloads: number;
 }
 
@@ -54,17 +58,30 @@ export interface Catalog {
   generatedAt: string;
   project: typeof PROJECT;
   apps: CatalogApp[];
-  obtainiumImport: { apps: ObtainiumApp[] };
+  updater: UpdaterRelease | null;
+  feed: UpdaterFeed;
 }
 
-interface ObtainiumApp {
-  id: string;
+export interface UpdaterRelease {
+  versionName: string;
+  versionCode: number;
+  sha256: string;
   url: string;
-  author: string;
-  name: string;
-  preferredApkIndex: number;
-  additionalSettings: string;
+  size: number;
+  releasedAt: string;
+  releaseUrl: string;
 }
+
+interface UpdaterFeed {
+  schema: 1;
+  generatedAt: string;
+  site: string;
+  certSha256: string;
+  updater: UpdaterRelease | null;
+  apps: unknown[];
+}
+
+const escapeRegex = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 async function gh<T>(path: string): Promise<T> {
   const token = process.env.GITHUB_TOKEN ?? process.env.GH_TOKEN;
@@ -121,46 +138,96 @@ function patchLists(body: string): { applied: string[]; failed: string[] } {
   };
 }
 
+async function fetchManifest(r: GhRelease): Promise<BuildManifest | null> {
+  const asset = r.assets.find((a) => a.name === "build.json");
+  if (!asset) return null;
+  try {
+    const res = await fetch(asset.browser_download_url, { headers: { "User-Agent": "auto-murph-apk-builds" } });
+    return res.ok ? ((await res.json()) as BuildManifest) : null;
+  } catch {
+    return null;
+  }
+}
+
 function toRelease(app: App, r: GhRelease): CatalogRelease | null {
-  const m = r.tag_name.match(new RegExp(`^${app.id}-v(.+)-p(.+)$`));
+  const m = r.tag_name.match(new RegExp(`^${escapeRegex(app.id)}-v(.+)-p(.+)$`));
   if (!m) return null;
   const assets: CatalogAsset[] = [];
   for (const a of r.assets) {
     const arch = app.arches.find((x) => a.name.endsWith(`-${x}.apk`));
-    if (arch) assets.push({ arch, name: a.name, url: a.browser_download_url, size: a.size, downloads: a.download_count });
+    if (arch) assets.push({ arch, name: a.name, url: a.browser_download_url, size: a.size, downloads: a.download_count, sha256: null });
   }
   if (!assets.length) return null;
-  return { tag: r.tag_name, version: m[1]!, patchesVersion: m[2]!, date: r.published_at, url: r.html_url, assets, ...patchLists(r.body ?? "") };
+  return {
+    tag: r.tag_name,
+    version: m[1]!,
+    patchesVersion: m[2]!,
+    date: r.published_at,
+    url: r.html_url,
+    assets,
+    ...patchLists(r.body ?? ""),
+    installedPackage: null,
+    versionCode: null,
+  };
 }
 
-const escapeRegex = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+/** Fill in checksums and installed package from the release's build.json. */
+async function enrich(release: CatalogRelease, gh: GhRelease): Promise<void> {
+  const manifest = await fetchManifest(gh);
+  if (!manifest) return;
+  release.installedPackage = manifest.package;
+  release.versionCode = manifest.versionCode;
+  release.applied = manifest.patches.applied;
+  release.failed = manifest.patches.failed;
+  for (const a of release.assets) a.sha256 = manifest.files[a.arch]?.sha256 ?? null;
+}
 
-function obtainiumApp(app: App, arch: Arch): ObtainiumApp {
+/**
+ * The updater app's feed (/api/v1/apps.json). Only apps with a release;
+ * field names must match updater/app/.../data/Feed.kt.
+ */
+function feedFor(apps: CatalogApp[], updater: UpdaterRelease | null): UpdaterFeed {
+  const abs = (path: string) => new URL(path, PROJECT.site).toString();
   return {
-    id: app.package,
-    url: `https://github.com/${PROJECT.repo}`,
-    author: PROJECT.name,
-    name: app.name,
-    preferredApkIndex: 0,
-    additionalSettings: JSON.stringify({
-      includePrereleases: false,
-      fallbackToOlderReleases: true,
-      // One repo holds every app; release titles start with the app name.
-      filterReleaseTitlesByRegEx: `^${escapeRegex(app.name)} \\d`,
-      apkFilterRegEx: `-${escapeRegex(arch)}\\.apk$`,
-      invertAPKFilter: false,
-      autoApkFilterByArch: false,
-      // Tags look like youtube-v21.20.405-p1.48.0; compare on the app version.
-      versionExtractionRegEx: "-v(\\d+(?:\\.\\d+)+)-p",
-      matchGroupToUse: "1",
-      versionDetection: true,
+    schema: 1,
+    generatedAt: new Date().toISOString(),
+    site: PROJECT.site,
+    certSha256: PROJECT.certSha256.replace(/:/g, "").toLowerCase(),
+    updater,
+    apps: apps.flatMap((a) => {
+      const r = a.latest;
+      if (!r) return [];
+      return [{
+        id: a.id,
+        name: a.name,
+        about: a.about,
+        icon: a.icon ? abs(a.icon) : null,
+        package: r.installedPackage ?? a.package,
+        originalPackage: a.package,
+        versionName: r.version,
+        build: r.tag,
+        releasedAt: r.date,
+        releaseUrl: r.url,
+        microg: a.microg,
+        patchesRepo: a.source.repo,
+        patchesVersion: r.patchesVersion,
+        patchCount: r.applied.length,
+        files: Object.fromEntries(r.assets.map((x) => [x.arch, { url: x.url, size: x.size, sha256: x.sha256 }])),
+      }];
     }),
   };
 }
 
-function obtainiumLink(o: ObtainiumApp): string {
-  const deep = `obtainium://app/${encodeURIComponent(JSON.stringify(o))}`;
-  return `https://apps.obtainium.imranr.dev/redirect?r=${encodeURIComponent(deep)}`;
+/** Latest release of the updater app itself (tag updater-v<version>, with updater.json). */
+async function updaterRelease(releases: GhRelease[]): Promise<UpdaterRelease | null> {
+  const r = releases.filter((x) => x.tag_name.startsWith("updater-v")).sort((a, b) => b.published_at.localeCompare(a.published_at))[0];
+  const meta = r?.assets.find((a) => a.name === "updater.json");
+  const apk = r?.assets.find((a) => a.name.endsWith(".apk"));
+  if (!r || !meta || !apk) return null;
+  const res = await fetch(meta.browser_download_url, { headers: { "User-Agent": "auto-murph-apk-builds" } });
+  if (!res.ok) return null;
+  const info = (await res.json()) as { versionName: string; versionCode: number; sha256: string };
+  return { ...info, url: apk.browser_download_url, size: apk.size, releasedAt: r.published_at, releaseUrl: r.html_url };
 }
 
 export async function buildCatalog(): Promise<Catalog> {
@@ -169,12 +236,12 @@ export async function buildCatalog(): Promise<Catalog> {
   const out: CatalogApp[] = [];
   for (const app of apps) {
     const source = await loadSource(app.source);
-    const mine = releases
-      .map((r) => toRelease(app, r))
-      .filter((r): r is CatalogRelease => !!r)
-      .sort((a, b) => b.date.localeCompare(a.date));
-    const obtainium: Partial<Record<Arch, string>> = {};
-    for (const arch of app.arches) obtainium[arch] = obtainiumLink(obtainiumApp(app, arch));
+    const pairs = releases
+      .map((r) => [toRelease(app, r), r] as const)
+      .filter((p): p is readonly [CatalogRelease, GhRelease] => !!p[0])
+      .sort((a, b) => b[0].date.localeCompare(a[0].date));
+    if (pairs[0]) await enrich(pairs[0][0], pairs[0][1]);
+    const mine = pairs.map((p) => p[0]);
     out.push({
       id: app.id,
       name: app.name,
@@ -186,16 +253,16 @@ export async function buildCatalog(): Promise<Catalog> {
       arches: app.arches,
       latest: mine[0] ?? null,
       older: mine.slice(1, 6),
-      obtainium,
       totalDownloads: mine.reduce((n, r) => n + r.assets.reduce((m, a) => m + a.downloads, 0), 0),
     });
   }
+  const updater = await updaterRelease(releases);
   return {
     generatedAt: new Date().toISOString(),
     project: PROJECT,
     apps: out,
-    // Bulk import defaults to arm64-v8a, the right file for almost every phone.
-    obtainiumImport: { apps: apps.map((a) => obtainiumApp(a, a.arches[0]!)) },
+    updater,
+    feed: feedFor(out, updater),
   };
 }
 

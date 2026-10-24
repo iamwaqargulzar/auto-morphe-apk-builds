@@ -1,0 +1,5 @@
+# Threads patches.
+name: HushThreads
+patches:
+  repo: SysAdminDoc/HushThreads
+  asset: '^patches-.*\.mpp$'

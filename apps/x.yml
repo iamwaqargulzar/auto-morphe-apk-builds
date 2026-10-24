@@ -1,0 +1,16 @@
+name: X
+package: com.twitter.android
+source: piko
+enabled: true
+order: 4
+version: auto
+arches: [arm64-v8a, armeabi-v7a]
+include: []
+# These two unlock features of the paid X Premium subscription.
+exclude:
+  - "NewX: Unlock color customization"
+  - "NewX: Unlock downloads"
+about: >-
+  X (Twitter) without ads, AI-generated posts or "who to follow", with the
+  classic Twitter branding, post sharing as images, poll results and many
+  timeline and layout options.

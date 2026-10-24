@@ -1,0 +1,13 @@
+name: Telegram
+package: org.telegram.messenger
+source: hushtelegram
+enabled: true
+order: 7
+version: auto
+arches: [arm64-v8a, armeabi-v7a]
+include: []
+exclude: []
+about: >-
+  Telegram without sponsored messages, Premium and Stars promotions or
+  analytics, with deleted-message keeping, faster downloads, link tracking
+  removal and dozens of interface tweaks.
