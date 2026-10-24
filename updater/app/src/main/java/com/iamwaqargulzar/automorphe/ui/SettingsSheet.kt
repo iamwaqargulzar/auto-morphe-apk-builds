@@ -1,4 +1,4 @@
-package com.iamwaqargulzar.automurph.ui
+package com.iamwaqargulzar.automorphe.ui
 
 import android.content.Intent
 import android.net.Uri
@@ -30,7 +30,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.iamwaqargulzar.automurph.BuildConfig
+import com.iamwaqargulzar.automorphe.BuildConfig
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -75,7 +75,7 @@ fun SettingsSheet(vm: MainViewModel, onDismiss: () -> Unit) {
 
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text("About", fontWeight = FontWeight.SemiBold)
-                Text("Auto Murph ${BuildConfig.VERSION_NAME}", style = MaterialTheme.typography.bodySmall)
+                Text("Auto Morphe ${BuildConfig.VERSION_NAME}", style = MaterialTheme.typography.bodySmall)
                 Text("Apps are verified against this signing certificate (SHA-256):", style = MaterialTheme.typography.bodySmall)
                 Text(
                     BuildConfig.CERT_SHA256.chunked(2).joinToString(":").uppercase(),

@@ -20,7 +20,7 @@ export function GET() {
     `- YouTube and YouTube Music need MicroG-RE (${microgUrl}) for Google sign-in and install alongside the official apps.`,
     "- Other apps keep their package name, so the Play Store version must be uninstalled first.",
     `- Every APK is signed with one certificate, SHA-256 ${project.certSha256}.`,
-    `- Updates: the Auto Murph Android app${catalog.updater ? ` (${catalog.updater.url})` : ""} installs the apps, checks every 6 hours and updates with one tap. Machine-readable feed: ${new URL("/api/v1/apps.json", project.site)}.`,
+    `- Updates: the Auto Morphe Android app${catalog.updater ? ` (${catalog.updater.url})` : ""} installs the apps, checks every 6 hours and updates with one tap. Machine-readable feed: ${new URL("/api/v1/apps.json", project.site)}.`,
     "- Patches that unlock paid subscriptions are not included.",
     `- Request apps: ${repoUrl}/issues/new?template=request-app.yml`,
     "",

@@ -1,7 +1,7 @@
-package com.iamwaqargulzar.automurph
+package com.iamwaqargulzar.automorphe
 
 import android.app.Application
-import com.iamwaqargulzar.automurph.work.UpdateWorker
+import com.iamwaqargulzar.automorphe.work.UpdateWorker
 
 class App : Application() {
     override fun onCreate() {

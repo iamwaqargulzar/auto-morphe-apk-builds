@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "auto-murph-updater"
+rootProject.name = "auto-morphe-updater"
 include(":app")

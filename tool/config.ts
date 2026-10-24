@@ -6,8 +6,8 @@ import { z } from "zod";
 export const ROOT = new URL("..", import.meta.url).pathname;
 
 export const PROJECT = {
-  name: "Auto Murph APK Builds",
-  repo: "iamwaqargulzar/auto-murph-apk-builds",
+  name: "Auto Morphe APK Builds",
+  repo: "iamwaqargulzar/auto-morphe-apk-builds",
   site: "https://apk.iamwaqargulzar.com",
   // SHA-256 of the signing certificate, so people can verify downloads.
   certSha256: "6D:83:1C:77:55:56:39:05:14:D3:4B:2C:0D:18:69:20:CA:A7:A9:AA:83:04:08:7B:DB:24:83:97:73:80:7A:A7",

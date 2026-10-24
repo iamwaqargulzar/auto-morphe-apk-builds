@@ -46,12 +46,12 @@ jobs:
         if: steps.v.outputs.exists != 'true'
         run: |
           name=${{ steps.v.outputs.name }}
-          apk="auto-murph-$name.apk"
+          apk="auto-morphe-$name.apk"
           cp updater/app/build/outputs/apk/release/app-release.apk "$apk"
           printf '{"versionName":"%s","versionCode":%s,"sha256":"%s"}\n' "$name" "${{ steps.v.outputs.code }}" "$(sha256sum "$apk" | cut -d' ' -f1)" > updater.json
           gh release create "updater-v$name" "$apk" updater.json \
-            --title "Auto Murph updater $name" \
-            --notes "The Auto Murph app: install the patched apps and keep them updated. Install this APK on your phone, then open Auto Murph." \
+            --title "Auto Morphe updater $name" \
+            --notes "The Auto Morphe app: install the patched apps and keep them updated. Install this APK on your phone, then open Auto Morphe." \
             --latest=false
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

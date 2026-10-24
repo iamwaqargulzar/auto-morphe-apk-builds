@@ -1,22 +1,22 @@
-# Auto Murph APK Builds: ad-free YouTube, Instagram, X, Reddit, TikTok & more for Android
+# Auto Morphe APK Builds: ad-free YouTube, Instagram, X, Reddit, TikTok & more for Android
 
-[![Build](https://img.shields.io/github/actions/workflow/status/iamwaqargulzar/auto-murph-apk-builds/build.yml?label=daily%20build)](https://github.com/iamwaqargulzar/auto-murph-apk-builds/actions/workflows/build.yml)
-[![Auto Murph app](https://img.shields.io/github/v/release/iamwaqargulzar/auto-murph-apk-builds?filter=updater-*&label=Auto%20Murph%20app)](https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases?q=updater)
+[![Build](https://img.shields.io/github/actions/workflow/status/iamwaqargulzar/auto-morphe-apk-builds/build.yml?label=daily%20build)](https://github.com/iamwaqargulzar/auto-morphe-apk-builds/actions/workflows/build.yml)
+[![Auto Morphe app](https://img.shields.io/github/v/release/iamwaqargulzar/auto-morphe-apk-builds?filter=updater-*&label=Auto%20Morphe%20app)](https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases?q=updater)
 [![License: MIT](https://img.shields.io/badge/tooling-MIT-blue)](LICENSE)
 
-**Auto Murph APK Builds** publishes free, non-root, patched Android apps (**YouTube, YouTube Music, Reddit, X,
-Instagram, Threads, Telegram, TikTok** and **Brave**) and keeps them up to date with its own Android app,
-**Auto Murph**. Every build starts from the official app on Google Play, applies open-source patches (no ads, less
+**Auto Morphe APK Builds** publishes free, non-root, patched Android apps (**YouTube, YouTube Music, Reddit, X,
+Instagram, Threads, Telegram, TikTok, Brave**, and Pakistan's **Simosa (Jazz)** and **My Zong**) and keeps them up to date with its own Android app,
+**Auto Morphe**. Every build starts from the official app on Google Play, applies open-source patches (no ads, less
 clutter, privacy fixes, extra settings), is signed with one stable key and is published by GitHub Actions in public.
 
-**Website: <https://apk.iamwaqargulzar.com>**: every app, the Auto Murph app, install guide and FAQ.
+**Website: <https://apk.iamwaqargulzar.com>**: every app, the Auto Morphe app, install guide and FAQ.
 
-![Auto Murph APK Builds website: hero with the Auto Murph app on a phone and a download button](docs/images/portal-home.png)
+![Auto Morphe APK Builds website: hero with the Auto Morphe app on a phone and a download button](docs/images/portal-home.png)
 
 ## Contents
 
 - [Apps](#apps)
-- [The Auto Murph app](#the-auto-murph-app)
+- [The Auto Morphe app](#the-auto-morphe-app)
 - [Which APK do I need?](#which-apk-do-i-need)
 - [How to install](#how-to-install)
 - [Reddit login](#reddit-login)
@@ -40,17 +40,19 @@ clutter, privacy fixes, extra settings), is signed with one stable key and is pu
 | [Telegram](https://apk.iamwaqargulzar.com/apps/telegram/) | No sponsored messages or Premium/Stars promos, keep deleted messages, faster downloads | [SysAdminDoc/HushTelegram](https://github.com/SysAdminDoc/HushTelegram) | Uninstall the Play Store version first |
 | [TikTok](https://apk.iamwaqargulzar.com/apps/tiktok/) | No feed ads or shopping clutter, tracker blocking, seek bar, links in your browser | [kveld9/kveld-morphe-patches](https://github.com/kveld9/kveld-morphe-patches) | Uninstall the Play Store version first |
 | [Brave](https://apk.iamwaqargulzar.com/apps/brave/) | No sponsored start page or promo notifications, analytics off, less battery drain | [kveld9/kveld-morphe-patches](https://github.com/kveld9/kveld-morphe-patches) | Builds as soon as Google Play releases the version the patches support |
+| [Simosa (Jazz World)](https://apk.iamwaqargulzar.com/apps/simosa/) | No ads or trackers, no Shop/Social+/Lifestyle tabs, daily check-in claimed for you | [totsiaw/proxma-patches](https://github.com/totsiaw/proxma-patches) | Uninstall the Play Store version first |
+| [My Zong](https://apk.iamwaqargulzar.com/apps/my-zong/) | No ads or trackers, daily reward without watching an ad | [totsiaw/proxma-patches](https://github.com/totsiaw/proxma-patches) | Uninstall the Play Store version first; built from an older version the patches support |
 
 Patches that unlock **paid subscriptions** are left out (for example X Premium features and TikTok's watermark remover).
 Current versions, patch lists, checksums and file sizes are on the [website](https://apk.iamwaqargulzar.com) and in
-[Releases](https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases).
+[Releases](https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases).
 
-## The Auto Murph app
+## The Auto Morphe app
 
-Auto Murph is this project's own Android app for installing and updating the patched apps. It's open source
+Auto Morphe is this project's own Android app for installing and updating the patched apps. It's open source
 ([`updater/`](updater)), under 2 MB, and signed with the same key as every build.
 
-<img src="docs/images/app-home.png" alt="Auto Murph app on Android: gradient header with app counts and cards for YouTube and YouTube Music with Install buttons" width="300" align="right" />
+<img src="docs/images/app-home.png" alt="Auto Morphe app on Android: gradient header with app counts and cards for YouTube and YouTube Music with Install buttons" width="300" align="right" />
 
 - **One-tap installs.** It picks the 64-bit or 32-bit file for your phone automatically.
 - **Update alerts.** It checks every 6 hours and notifies you once per new build; it can be limited to Wi-Fi.
@@ -58,8 +60,8 @@ Auto Murph is this project's own Android app for installing and updating the pat
 - **Spots conflicts.** If the Play Store version is installed, it explains why and offers to remove it.
 - **Silent updates.** On Android 12+, apps it installed update without a confirmation prompt, and it updates itself.
 
-**Get it:** download the latest `auto-murph-*.apk` from the
-[updater releases](https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases?q=updater) or the
+**Get it:** download the latest `auto-morphe-*.apk` from the
+[updater releases](https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases?q=updater) or the
 [website](https://apk.iamwaqargulzar.com). It reads the public feed at
 [`/api/v1/apps.json`](https://apk.iamwaqargulzar.com/api/v1/apps.json).
 
@@ -67,7 +69,7 @@ Auto Murph is this project's own Android app for installing and updating the pat
 
 ## Which APK do I need?
 
-Every app release has two files (Auto Murph chooses for you):
+Every app release has two files (Auto Morphe chooses for you):
 
 | File ends with | For | Example devices |
 |---|---|---|
@@ -78,8 +80,8 @@ Not sure? Try `arm64-v8a` first. Android refuses to install the wrong one, so no
 
 ## How to install
 
-1. Install **Auto Murph** (recommended), or download an APK from the [website](https://apk.iamwaqargulzar.com).
-2. When Android asks, allow Auto Murph (or your browser) to **install unknown apps**.
+1. Install **Auto Morphe** (recommended), or download an APK from the [website](https://apk.iamwaqargulzar.com).
+2. When Android asks, allow Auto Morphe (or your browser) to **install unknown apps**.
 3. **YouTube / YouTube Music:** install [MicroG-RE](https://github.com/MorpheApp/MicroG-RE/releases/latest) as well to sign in with Google.
    These install alongside the official apps.
 4. **All other apps** keep their original package name: uninstall the Play Store version first. Android only updates an app
@@ -96,15 +98,15 @@ session carries over.
 
 1. Uninstall any Reddit app.
 2. Install the **Reddit login helper** (patched Reddit 2024.02.0, from the
-   [Reddit releases](https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases?q=reddit-login)), and log in with
+   [Reddit releases](https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases?q=reddit-login)), and log in with
    your **email/username and password**.
-3. Install the current patched Reddit over it (from Auto Murph or the website). You stay logged in.
+3. Install the current patched Reddit over it (from Auto Morphe or the website). You stay logged in.
 
 If it still fails: try another network (Wi-Fi vs. mobile data, with or without a VPN) or wait 24–48 hours.
 
 ## Verify a download
 
-All APKs, including Auto Murph, are signed with the same certificate:
+All APKs, including Auto Morphe, are signed with the same certificate:
 
 ```text
 SHA-256: 6D:83:1C:77:55:56:39:05:14:D3:4B:2C:0D:18:69:20:CA:A7:A9:AA:83:04:08:7B:DB:24:83:97:73:80:7A:A7
@@ -118,16 +120,16 @@ Each release also has a `build.json` with the SHA-256 of every APK. If the finge
 
 ## FAQ
 
-**What is Auto Murph APK Builds?**
+**What is Auto Morphe APK Builds?**
 An open-source project that turns official Google Play apps into patched APKs and publishes them automatically, plus
-the Auto Murph app that installs and updates them. Build scripts, logs and releases are all public in this repository.
+the Auto Morphe app that installs and updates them. Build scripts, logs and releases are all public in this repository.
 
 **Is it free? Do I need root?**
 Yes, it's free, and no root is needed.
 
 **How often are builds updated?**
 A build runs every day at 02:00 UTC. A new release appears when the patches or the newest supported app version change.
-Auto Murph notifies you; you can also *Watch → Releases* on GitHub.
+Auto Morphe notifies you; you can also *Watch → Releases* on GitHub.
 
 **Why is an app's version older than the Play Store one?**
 Patches target specific app versions. Each build uses the newest version the current patches fully support.
@@ -141,14 +143,14 @@ Directly from Google Play. No third-party APK mirrors are used.
 
 **Is it safe?**
 The source APK comes from Google Play, the patches are open source, every build runs with public logs, and every file is
-signed with the same certificate. Auto Murph verifies checksums before installing.
+signed with the same certificate. Auto Morphe verifies checksums before installing.
 
 **Is it legal?**
 This isn't legal advice. The patches are GPLv3 and their notice ships with every release; the original apps are free.
 Using a modified client may go against a service's terms of service, so decide for yourself.
 
 **An app crashes or a feature is missing. What now?**
-Check the release notes (patches that failed are listed). Open an [issue](https://github.com/iamwaqargulzar/auto-murph-apk-builds/issues)
+Check the release notes (patches that failed are listed). Open an [issue](https://github.com/iamwaqargulzar/auto-morphe-apk-builds/issues)
 with the app version and phone model. Problems inside a patch belong to the patch project linked in [Apps](#apps).
 
 ## How it works
@@ -161,7 +163,7 @@ flowchart LR
   D --> E[Sign with project key]
   E --> F[GitHub Release<br/>APKs + build.json + NOTICE]
   F --> G[Website + /api/v1/apps.json<br/>on GitHub Pages]
-  G --> H[Auto Murph app<br/>notifies and installs]
+  G --> H[Auto Morphe app<br/>notifies and installs]
 ```
 
 - **Build tool:** TypeScript (Node 22+) in [`tool/`](tool). Each app is one YAML file in [`apps/`](apps); patch sources are in [`sources/`](sources).
@@ -171,7 +173,7 @@ flowchart LR
 - **Website:** [Astro](https://astro.build) in [`site/`](site), on GitHub Pages at <https://apk.iamwaqargulzar.com>.
   It also serves [`/api/v1/apps.json`](https://apk.iamwaqargulzar.com/api/v1/apps.json), [`/sitemap.xml`](https://apk.iamwaqargulzar.com/sitemap.xml)
   and [`/llms.txt`](https://apk.iamwaqargulzar.com/llms.txt).
-- **Auto Murph app:** Kotlin + Jetpack Compose in [`updater/`](updater), built and released by its own workflow.
+- **Auto Morphe app:** Kotlin + Jetpack Compose in [`updater/`](updater), built and released by its own workflow.
 - **Cost:** none. It's a public repository on standard GitHub-hosted runners, and APKs are release assets.
 
 <details>
@@ -214,12 +216,12 @@ if the patches come from another repository. Use `exclude:` for patches you don'
 
 ## Request an app
 
-[Open an app request](https://github.com/iamwaqargulzar/auto-murph-apk-builds/issues/new?template=request-app.yml) with the
+[Open an app request](https://github.com/iamwaqargulzar/auto-morphe-apk-builds/issues/new?template=request-app.yml) with the
 app name and Play Store link. Apps are added when a maintained patch set supports them without unlocking paid features.
 
 ## License and disclaimer
 
-- The build tooling, website and Auto Murph app in this repository are [MIT licensed](LICENSE).
+- The build tooling, website and Auto Morphe app in this repository are [MIT licensed](LICENSE).
 - Released APKs contain code from third-party patches licensed under GPLv3; every release includes their [NOTICE](NOTICE).
   "Morphe" is the patch project's name; this project is independent of it.
 - YouTube and Google Play are trademarks of Google LLC; Instagram and Threads of Meta Platforms, Inc.; X of X Corp.;

@@ -1,5 +1,5 @@
 <resources>
-    <style name="Theme.AutoMurph" parent="android:Theme.Material.Light.NoActionBar">
+    <style name="Theme.AutoMorphe" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:windowBackground">@color/bg</item>
     </style>
 </resources>

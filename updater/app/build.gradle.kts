@@ -9,11 +9,11 @@ val appVersionCode = (findProperty("versionCode") as String?)?.toInt() ?: 1
 val appVersionName = (findProperty("versionName") as String?) ?: "1.0.0"
 
 android {
-    namespace = "com.iamwaqargulzar.automurph"
+    namespace = "com.iamwaqargulzar.automorphe"
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "com.iamwaqargulzar.automurph"
+        applicationId = "com.iamwaqargulzar.automorphe"
         minSdk = 26
         targetSdk = 36
         versionCode = appVersionCode

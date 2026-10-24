@@ -1,4 +1,4 @@
-package com.iamwaqargulzar.automurph.work
+package com.iamwaqargulzar.automorphe.work
 
 import android.Manifest
 import android.app.NotificationChannel
@@ -18,12 +18,12 @@ import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import com.iamwaqargulzar.automurph.R
-import com.iamwaqargulzar.automurph.data.FeedClient
-import com.iamwaqargulzar.automurph.data.Prefs
-import com.iamwaqargulzar.automurph.data.Status
-import com.iamwaqargulzar.automurph.data.entries
-import com.iamwaqargulzar.automurph.ui.MainActivity
+import com.iamwaqargulzar.automorphe.R
+import com.iamwaqargulzar.automorphe.data.FeedClient
+import com.iamwaqargulzar.automorphe.data.Prefs
+import com.iamwaqargulzar.automorphe.data.Status
+import com.iamwaqargulzar.automorphe.data.entries
+import com.iamwaqargulzar.automorphe.ui.MainActivity
 import java.util.concurrent.TimeUnit
 
 /** Checks the feed in the background and posts one notification per new build. */

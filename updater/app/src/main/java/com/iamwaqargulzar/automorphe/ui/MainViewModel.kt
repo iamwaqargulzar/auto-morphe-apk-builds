@@ -1,20 +1,21 @@
-package com.iamwaqargulzar.automurph.ui
+package com.iamwaqargulzar.automorphe.ui
 
 import android.app.Application
 import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.iamwaqargulzar.automurph.BuildConfig
-import com.iamwaqargulzar.automurph.data.AppEntry
-import com.iamwaqargulzar.automurph.data.Feed
-import com.iamwaqargulzar.automurph.data.FeedClient
-import com.iamwaqargulzar.automurph.data.Prefs
-import com.iamwaqargulzar.automurph.data.Status
-import com.iamwaqargulzar.automurph.data.entries
-import com.iamwaqargulzar.automurph.install.InstallResult
-import com.iamwaqargulzar.automurph.install.Installer
-import com.iamwaqargulzar.automurph.work.UpdateWorker
+import com.iamwaqargulzar.automorphe.BuildConfig
+import com.iamwaqargulzar.automorphe.data.AppEntry
+import com.iamwaqargulzar.automorphe.data.Feed
+import com.iamwaqargulzar.automorphe.data.FeedClient
+import com.iamwaqargulzar.automorphe.data.Prefs
+import com.iamwaqargulzar.automorphe.data.Status
+import com.iamwaqargulzar.automorphe.data.entries
+import com.iamwaqargulzar.automorphe.data.installedApp
+import com.iamwaqargulzar.automorphe.install.InstallResult
+import com.iamwaqargulzar.automorphe.install.Installer
+import com.iamwaqargulzar.automorphe.work.UpdateWorker
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -35,10 +36,15 @@ data class UiState(
     val message: String? = null,
     val selfUpdate: Boolean = false,
     val selfTask: Task? = null,
+    // The app before its rename (package ...automurph) is still installed.
+    val oldAppInstalled: Boolean = false,
 ) {
     val updates get() = entries.count { it.status == Status.UpdateAvailable }
     val installed get() = entries.count { it.status == Status.UpToDate || it.status == Status.UpdateAvailable }
 }
+
+/** Package of this app before it was renamed from Auto Murph; a different app to Android. */
+const val OLD_PACKAGE = "com.iamwaqargulzar.automurph"
 
 class MainViewModel(app: Application) : AndroidViewModel(app) {
     private val context get() = getApplication<Application>()
@@ -89,6 +95,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     /** Re-reads installed apps (after an install, uninstall or returning to the app). */
     fun recompute() {
+        _state.update { it.copy(oldAppInstalled = context.packageManager.installedApp(OLD_PACKAGE) != null) }
         val feed = _state.value.feed ?: return
         _state.update { it.copy(entries = entries(feed, context.packageManager, prefs)) }
     }
@@ -101,7 +108,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         install(entry, entry.abi?.let { helper.files[it] }, helper.build)
     }
 
-    private fun install(entry: AppEntry, file: com.iamwaqargulzar.automurph.data.FeedFile?, build: String) {
+    private fun install(entry: AppEntry, file: com.iamwaqargulzar.automorphe.data.FeedFile?, build: String) {
         file ?: return
         val pkg = entry.app.packageName
         if (pkg in _state.value.tasks) return

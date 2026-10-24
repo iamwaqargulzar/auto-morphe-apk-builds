@@ -1,11 +1,11 @@
-package com.iamwaqargulzar.automurph.data
+package com.iamwaqargulzar.automorphe.data
 
 import android.content.Context
 import androidx.core.content.edit
 
 /** Small settings store, plus which build we last installed for each package. */
 class Prefs(context: Context) {
-    private val prefs = context.getSharedPreferences("automurph", Context.MODE_PRIVATE)
+    private val prefs = context.getSharedPreferences("automorphe", Context.MODE_PRIVATE)
 
     fun installedBuild(packageName: String): String? = prefs.getString("build:$packageName", null)
 

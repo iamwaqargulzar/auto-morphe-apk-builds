@@ -1,4 +1,4 @@
-package com.iamwaqargulzar.automurph.install
+package com.iamwaqargulzar.automorphe.install
 
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInstaller
 import android.os.Build
-import com.iamwaqargulzar.automurph.BuildConfig
+import com.iamwaqargulzar.automorphe.BuildConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -22,7 +22,7 @@ sealed interface InstallResult {
 }
 
 object Installer {
-    private const val ACTION = "com.iamwaqargulzar.automurph.INSTALL_STATUS"
+    private const val ACTION = "com.iamwaqargulzar.automorphe.INSTALL_STATUS"
     private val results = Channel<InstallResult>(Channel.BUFFERED)
     val events = results.receiveAsFlow()
 
@@ -36,7 +36,7 @@ object Installer {
             conn.instanceFollowRedirects = true
             conn.connectTimeout = 20_000
             conn.readTimeout = 60_000
-            conn.setRequestProperty("User-Agent", "AutoMurph/${BuildConfig.VERSION_NAME}")
+            conn.setRequestProperty("User-Agent", "AutoMorphe/${BuildConfig.VERSION_NAME}")
             try {
                 if (conn.responseCode != 200) error("Download failed (HTTP ${conn.responseCode})")
                 val total = conn.contentLengthLong.takeIf { it > 0 }

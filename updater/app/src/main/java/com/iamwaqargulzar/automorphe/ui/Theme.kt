@@ -1,4 +1,4 @@
-package com.iamwaqargulzar.automurph.ui
+package com.iamwaqargulzar.automorphe.ui
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -41,7 +41,7 @@ private val Dark = darkColorScheme(
 )
 
 @Composable
-fun AutoMurphTheme(content: @Composable () -> Unit) {
+fun AutoMorpheTheme(content: @Composable () -> Unit) {
     val dark = isSystemInDarkTheme()
     val context = LocalContext.current
     val scheme = when {

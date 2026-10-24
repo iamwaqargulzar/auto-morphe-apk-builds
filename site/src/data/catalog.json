@@ -1,8 +1,8 @@
 {
   "generatedAt": "2026-10-24T05:42:51.861Z",
   "project": {
-    "name": "Auto Murph APK Builds",
-    "repo": "iamwaqargulzar/auto-murph-apk-builds",
+    "name": "Auto Morphe APK Builds",
+    "repo": "iamwaqargulzar/auto-morphe-apk-builds",
     "site": "https://apk.iamwaqargulzar.com",
     "certSha256": "6D:83:1C:77:55:56:39:05:14:D3:4B:2C:0D:18:69:20:CA:A7:A9:AA:83:04:08:7B:DB:24:83:97:73:80:7A:A7"
   },
@@ -27,12 +27,12 @@
         "version": "21.20.405",
         "patchesVersion": "1.48.0",
         "date": "2026-10-24T05:07:03Z",
-        "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/tag/youtube-v21.20.405-p1.48.0",
+        "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/tag/youtube-v21.20.405-p1.48.0",
         "assets": [
           {
             "arch": "arm64-v8a",
             "name": "youtube-21.20.405-arm64-v8a.apk",
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/youtube-v21.20.405-p1.48.0/youtube-21.20.405-arm64-v8a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/youtube-v21.20.405-p1.48.0/youtube-21.20.405-arm64-v8a.apk",
             "size": 122043881,
             "downloads": 1,
             "sha256": "206e36d5deceee6e50b647b15428004a627d827bc03ec62eedbf6134e4812830"
@@ -40,7 +40,7 @@
           {
             "arch": "armeabi-v7a",
             "name": "youtube-21.20.405-armeabi-v7a.apk",
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/youtube-v21.20.405-p1.48.0/youtube-21.20.405-armeabi-v7a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/youtube-v21.20.405-p1.48.0/youtube-21.20.405-armeabi-v7a.apk",
             "size": 102024761,
             "downloads": 0,
             "sha256": "4e7ab52a2ea2590c9b27ed05e99343e6e733b5cf27710e50fbf6a00a652a2194"
@@ -180,12 +180,12 @@
         "version": "9.42.52",
         "patchesVersion": "1.48.0",
         "date": "2026-10-24T05:06:30Z",
-        "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/tag/youtube-music-v9.42.52-p1.48.0",
+        "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/tag/youtube-music-v9.42.52-p1.48.0",
         "assets": [
           {
             "arch": "arm64-v8a",
             "name": "youtube-music-9.42.52-arm64-v8a.apk",
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/youtube-music-v9.42.52-p1.48.0/youtube-music-9.42.52-arm64-v8a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/youtube-music-v9.42.52-p1.48.0/youtube-music-9.42.52-arm64-v8a.apk",
             "size": 72355501,
             "downloads": 0,
             "sha256": "2768dae6783c566ac8661bf5b3caf7a08f1d96a3745d8b16a8846b45b48bcad3"
@@ -193,7 +193,7 @@
           {
             "arch": "armeabi-v7a",
             "name": "youtube-music-9.42.52-armeabi-v7a.apk",
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/youtube-music-v9.42.52-p1.48.0/youtube-music-9.42.52-armeabi-v7a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/youtube-music-v9.42.52-p1.48.0/youtube-music-9.42.52-armeabi-v7a.apk",
             "size": 59941541,
             "downloads": 0,
             "sha256": "01f6a59aad66b403b5f299c5af4adbe708f969fcdd6403c25b989ace15e1439f"
@@ -277,12 +277,12 @@
         "version": "2026.42.0",
         "patchesVersion": "1.48.0",
         "date": "2026-10-24T05:06:24Z",
-        "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/tag/reddit-v2026.42.0-p1.48.0",
+        "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/tag/reddit-v2026.42.0-p1.48.0",
         "assets": [
           {
             "arch": "arm64-v8a",
             "name": "reddit-2026.42.0-arm64-v8a.apk",
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/reddit-v2026.42.0-p1.48.0/reddit-2026.42.0-arm64-v8a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/reddit-v2026.42.0-p1.48.0/reddit-2026.42.0-arm64-v8a.apk",
             "size": 80790006,
             "downloads": 0,
             "sha256": "25558c1db5ea2237923356cccc466ee3f983e3ef37aad1fe4c0336b034f4cecf"
@@ -290,7 +290,7 @@
           {
             "arch": "armeabi-v7a",
             "name": "reddit-2026.42.0-armeabi-v7a.apk",
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/reddit-v2026.42.0-p1.48.0/reddit-2026.42.0-armeabi-v7a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/reddit-v2026.42.0-p1.48.0/reddit-2026.42.0-armeabi-v7a.apk",
             "size": 76632307,
             "downloads": 0,
             "sha256": "eb1b1799da6fa331a667fb92ca2a70654516c3670bdaa815e2c498152865f3a3"
@@ -360,12 +360,12 @@
         "version": "12.35.0-prod.01",
         "patchesVersion": "3.61.0",
         "date": "2026-10-24T05:06:49Z",
-        "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/tag/x-v12.35.0-prod.01-p3.61.0",
+        "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/tag/x-v12.35.0-prod.01-p3.61.0",
         "assets": [
           {
             "arch": "arm64-v8a",
             "name": "x-12.35.0-prod.01-arm64-v8a.apk",
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/x-v12.35.0-prod.01-p3.61.0/x-12.35.0-prod.01-arm64-v8a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/x-v12.35.0-prod.01-p3.61.0/x-12.35.0-prod.01-arm64-v8a.apk",
             "size": 149127615,
             "downloads": 0,
             "sha256": "8f698eb1e47d1f9a492eaddfc059fccfb583acdd6afa7a85b38fd00c443178b0"
@@ -373,7 +373,7 @@
           {
             "arch": "armeabi-v7a",
             "name": "x-12.35.0-prod.01-armeabi-v7a.apk",
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/x-v12.35.0-prod.01-p3.61.0/x-12.35.0-prod.01-armeabi-v7a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/x-v12.35.0-prod.01-p3.61.0/x-12.35.0-prod.01-armeabi-v7a.apk",
             "size": 121794829,
             "downloads": 0,
             "sha256": "d70d64cfe41f02d6270cf042a64b8b8f8c4b479c5ed845a2ee6025cd27f9349c"
@@ -450,12 +450,12 @@
         "version": "452.1.0.53.64",
         "patchesVersion": "0.0.15",
         "date": "2026-10-24T05:07:37Z",
-        "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/tag/instagram-v452.1.0.53.64-p0.0.15",
+        "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/tag/instagram-v452.1.0.53.64-p0.0.15",
         "assets": [
           {
             "arch": "arm64-v8a",
             "name": "instagram-452.1.0.53.64-arm64-v8a.apk",
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/instagram-v452.1.0.53.64-p0.0.15/instagram-452.1.0.53.64-arm64-v8a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/instagram-v452.1.0.53.64-p0.0.15/instagram-452.1.0.53.64-arm64-v8a.apk",
             "size": 168277888,
             "downloads": 0,
             "sha256": "1da0b19581b1a343b2d0635161b6b154b4d455fdc771078491952c6941add6f2"
@@ -463,7 +463,7 @@
           {
             "arch": "armeabi-v7a",
             "name": "instagram-452.1.0.53.64-armeabi-v7a.apk",
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/instagram-v452.1.0.53.64-p0.0.15/instagram-452.1.0.53.64-armeabi-v7a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/instagram-v452.1.0.53.64-p0.0.15/instagram-452.1.0.53.64-armeabi-v7a.apk",
             "size": 168737522,
             "downloads": 0,
             "sha256": "c56ec0fc7b2499e2c36a2feb1e565a46624904d100450a518de44b729857809e"
@@ -608,12 +608,12 @@
         "version": "452.0.0.50.64",
         "patchesVersion": "0.0.16",
         "date": "2026-10-24T05:07:06Z",
-        "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/tag/threads-v452.0.0.50.64-p0.0.16",
+        "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/tag/threads-v452.0.0.50.64-p0.0.16",
         "assets": [
           {
             "arch": "arm64-v8a",
             "name": "threads-452.0.0.50.64-arm64-v8a.apk",
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/threads-v452.0.0.50.64-p0.0.16/threads-452.0.0.50.64-arm64-v8a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/threads-v452.0.0.50.64-p0.0.16/threads-452.0.0.50.64-arm64-v8a.apk",
             "size": 149513967,
             "downloads": 0,
             "sha256": "971abe9b16cd50a7c3215375a1a64ddc59f48092f0ca2c2c9460887ff75c0376"
@@ -621,7 +621,7 @@
           {
             "arch": "armeabi-v7a",
             "name": "threads-452.0.0.50.64-armeabi-v7a.apk",
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/threads-v452.0.0.50.64-p0.0.16/threads-452.0.0.50.64-armeabi-v7a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/threads-v452.0.0.50.64-p0.0.16/threads-452.0.0.50.64-armeabi-v7a.apk",
             "size": 137436722,
             "downloads": 0,
             "sha256": "6a52c7a13ebd1307b89aaba25940578843a19156ede5b0b46e91c72191fe4d01"
@@ -674,12 +674,12 @@
         "version": "13.1.0",
         "patchesVersion": "0.0.20",
         "date": "2026-10-24T05:06:27Z",
-        "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/tag/telegram-v13.1.0-p0.0.20",
+        "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/tag/telegram-v13.1.0-p0.0.20",
         "assets": [
           {
             "arch": "arm64-v8a",
             "name": "telegram-13.1.0-arm64-v8a.apk",
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/telegram-v13.1.0-p0.0.20/telegram-13.1.0-arm64-v8a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/telegram-v13.1.0-p0.0.20/telegram-13.1.0-arm64-v8a.apk",
             "size": 41814029,
             "downloads": 0,
             "sha256": "49802bb023bb68bdf4ffa522c4a5e3cf84bd8e5cdfca3606b31894cbd0c2f244"
@@ -687,7 +687,7 @@
           {
             "arch": "armeabi-v7a",
             "name": "telegram-13.1.0-armeabi-v7a.apk",
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/telegram-v13.1.0-p0.0.20/telegram-13.1.0-armeabi-v7a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/telegram-v13.1.0-p0.0.20/telegram-13.1.0-armeabi-v7a.apk",
             "size": 40358500,
             "downloads": 0,
             "sha256": "b30c66d1eb83b4ed0050fbcec6d883e2efe32d0dcb5481fe160dec07d38259b9"
@@ -786,12 +786,12 @@
         "version": "47.4.3",
         "patchesVersion": "2.8.0",
         "date": "2026-10-24T05:08:18Z",
-        "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/tag/tiktok-v47.4.3-p2.8.0",
+        "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/tag/tiktok-v47.4.3-p2.8.0",
         "assets": [
           {
             "arch": "arm64-v8a",
             "name": "tiktok-47.4.3-arm64-v8a.apk",
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/tiktok-v47.4.3-p2.8.0/tiktok-47.4.3-arm64-v8a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/tiktok-v47.4.3-p2.8.0/tiktok-47.4.3-arm64-v8a.apk",
             "size": 308460775,
             "downloads": 0,
             "sha256": "b17ab6a9eca4332bb52c2646fdefc59b15bc5e55bc6e04fe401c0637cafcc036"
@@ -799,7 +799,7 @@
           {
             "arch": "armeabi-v7a",
             "name": "tiktok-47.4.3-armeabi-v7a.apk",
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/tiktok-v47.4.3-p2.8.0/tiktok-47.4.3-armeabi-v7a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/tiktok-v47.4.3-p2.8.0/tiktok-47.4.3-armeabi-v7a.apk",
             "size": 304610782,
             "downloads": 0,
             "sha256": "1bf8e0e2477378ea8b57d8b6e5af3f9cd6f1881bcb3a0161003e005f3697fb6e"
@@ -866,10 +866,10 @@
     "versionName": "1.0.0",
     "versionCode": 10000,
     "sha256": "624b4fe41b519d092076d66adfb84b1f0447d4d8c830cbd934c24fdfd44b289d",
-    "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/updater-v1.0.0/auto-murph-1.0.0.apk",
+    "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/updater-v1.0.0/auto-morphe-1.0.0.apk",
     "size": 1386819,
     "releasedAt": "2026-10-24T05:07:45Z",
-    "releaseUrl": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/tag/updater-v1.0.0"
+    "releaseUrl": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/tag/updater-v1.0.0"
   },
   "feed": {
     "schema": 1,
@@ -880,10 +880,10 @@
       "versionName": "1.0.0",
       "versionCode": 10000,
       "sha256": "624b4fe41b519d092076d66adfb84b1f0447d4d8c830cbd934c24fdfd44b289d",
-      "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/updater-v1.0.0/auto-murph-1.0.0.apk",
+      "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/updater-v1.0.0/auto-morphe-1.0.0.apk",
       "size": 1386819,
       "releasedAt": "2026-10-24T05:07:45Z",
-      "releaseUrl": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/tag/updater-v1.0.0"
+      "releaseUrl": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/tag/updater-v1.0.0"
     },
     "apps": [
       {
@@ -896,19 +896,19 @@
         "versionName": "21.20.405",
         "build": "youtube-v21.20.405-p1.48.0",
         "releasedAt": "2026-10-24T05:07:03Z",
-        "releaseUrl": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/tag/youtube-v21.20.405-p1.48.0",
+        "releaseUrl": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/tag/youtube-v21.20.405-p1.48.0",
         "microg": true,
         "patchesRepo": "MorpheApp/morphe-patches",
         "patchesVersion": "1.48.0",
         "patchCount": 104,
         "files": {
           "arm64-v8a": {
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/youtube-v21.20.405-p1.48.0/youtube-21.20.405-arm64-v8a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/youtube-v21.20.405-p1.48.0/youtube-21.20.405-arm64-v8a.apk",
             "size": 122043881,
             "sha256": "206e36d5deceee6e50b647b15428004a627d827bc03ec62eedbf6134e4812830"
           },
           "armeabi-v7a": {
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/youtube-v21.20.405-p1.48.0/youtube-21.20.405-armeabi-v7a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/youtube-v21.20.405-p1.48.0/youtube-21.20.405-armeabi-v7a.apk",
             "size": 102024761,
             "sha256": "4e7ab52a2ea2590c9b27ed05e99343e6e733b5cf27710e50fbf6a00a652a2194"
           }
@@ -925,19 +925,19 @@
         "versionName": "9.42.52",
         "build": "youtube-music-v9.42.52-p1.48.0",
         "releasedAt": "2026-10-24T05:06:30Z",
-        "releaseUrl": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/tag/youtube-music-v9.42.52-p1.48.0",
+        "releaseUrl": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/tag/youtube-music-v9.42.52-p1.48.0",
         "microg": true,
         "patchesRepo": "MorpheApp/morphe-patches",
         "patchesVersion": "1.48.0",
         "patchCount": 48,
         "files": {
           "arm64-v8a": {
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/youtube-music-v9.42.52-p1.48.0/youtube-music-9.42.52-arm64-v8a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/youtube-music-v9.42.52-p1.48.0/youtube-music-9.42.52-arm64-v8a.apk",
             "size": 72355501,
             "sha256": "2768dae6783c566ac8661bf5b3caf7a08f1d96a3745d8b16a8846b45b48bcad3"
           },
           "armeabi-v7a": {
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/youtube-music-v9.42.52-p1.48.0/youtube-music-9.42.52-armeabi-v7a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/youtube-music-v9.42.52-p1.48.0/youtube-music-9.42.52-armeabi-v7a.apk",
             "size": 59941541,
             "sha256": "01f6a59aad66b403b5f299c5af4adbe708f969fcdd6403c25b989ace15e1439f"
           }
@@ -954,19 +954,19 @@
         "versionName": "2026.42.0",
         "build": "reddit-v2026.42.0-p1.48.0",
         "releasedAt": "2026-10-24T05:06:24Z",
-        "releaseUrl": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/tag/reddit-v2026.42.0-p1.48.0",
+        "releaseUrl": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/tag/reddit-v2026.42.0-p1.48.0",
         "microg": false,
         "patchesRepo": "MorpheApp/morphe-patches",
         "patchesVersion": "1.48.0",
         "patchCount": 29,
         "files": {
           "arm64-v8a": {
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/reddit-v2026.42.0-p1.48.0/reddit-2026.42.0-arm64-v8a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/reddit-v2026.42.0-p1.48.0/reddit-2026.42.0-arm64-v8a.apk",
             "size": 80790006,
             "sha256": "25558c1db5ea2237923356cccc466ee3f983e3ef37aad1fe4c0336b034f4cecf"
           },
           "armeabi-v7a": {
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/reddit-v2026.42.0-p1.48.0/reddit-2026.42.0-armeabi-v7a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/reddit-v2026.42.0-p1.48.0/reddit-2026.42.0-armeabi-v7a.apk",
             "size": 76632307,
             "sha256": "eb1b1799da6fa331a667fb92ca2a70654516c3670bdaa815e2c498152865f3a3"
           }
@@ -983,19 +983,19 @@
         "versionName": "12.35.0-prod.01",
         "build": "x-v12.35.0-prod.01-p3.61.0",
         "releasedAt": "2026-10-24T05:06:49Z",
-        "releaseUrl": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/tag/x-v12.35.0-prod.01-p3.61.0",
+        "releaseUrl": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/tag/x-v12.35.0-prod.01-p3.61.0",
         "microg": false,
         "patchesRepo": "crimera/piko-newx",
         "patchesVersion": "3.61.0",
         "patchCount": 41,
         "files": {
           "arm64-v8a": {
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/x-v12.35.0-prod.01-p3.61.0/x-12.35.0-prod.01-arm64-v8a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/x-v12.35.0-prod.01-p3.61.0/x-12.35.0-prod.01-arm64-v8a.apk",
             "size": 149127615,
             "sha256": "8f698eb1e47d1f9a492eaddfc059fccfb583acdd6afa7a85b38fd00c443178b0"
           },
           "armeabi-v7a": {
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/x-v12.35.0-prod.01-p3.61.0/x-12.35.0-prod.01-armeabi-v7a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/x-v12.35.0-prod.01-p3.61.0/x-12.35.0-prod.01-armeabi-v7a.apk",
             "size": 121794829,
             "sha256": "d70d64cfe41f02d6270cf042a64b8b8f8c4b479c5ed845a2ee6025cd27f9349c"
           }
@@ -1012,19 +1012,19 @@
         "versionName": "452.1.0.53.64",
         "build": "instagram-v452.1.0.53.64-p0.0.15",
         "releasedAt": "2026-10-24T05:07:37Z",
-        "releaseUrl": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/tag/instagram-v452.1.0.53.64-p0.0.15",
+        "releaseUrl": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/tag/instagram-v452.1.0.53.64-p0.0.15",
         "microg": false,
         "patchesRepo": "SysAdminDoc/HushGram",
         "patchesVersion": "0.0.15",
         "patchCount": 109,
         "files": {
           "arm64-v8a": {
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/instagram-v452.1.0.53.64-p0.0.15/instagram-452.1.0.53.64-arm64-v8a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/instagram-v452.1.0.53.64-p0.0.15/instagram-452.1.0.53.64-arm64-v8a.apk",
             "size": 168277888,
             "sha256": "1da0b19581b1a343b2d0635161b6b154b4d455fdc771078491952c6941add6f2"
           },
           "armeabi-v7a": {
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/instagram-v452.1.0.53.64-p0.0.15/instagram-452.1.0.53.64-armeabi-v7a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/instagram-v452.1.0.53.64-p0.0.15/instagram-452.1.0.53.64-armeabi-v7a.apk",
             "size": 168737522,
             "sha256": "c56ec0fc7b2499e2c36a2feb1e565a46624904d100450a518de44b729857809e"
           }
@@ -1041,19 +1041,19 @@
         "versionName": "452.0.0.50.64",
         "build": "threads-v452.0.0.50.64-p0.0.16",
         "releasedAt": "2026-10-24T05:07:06Z",
-        "releaseUrl": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/tag/threads-v452.0.0.50.64-p0.0.16",
+        "releaseUrl": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/tag/threads-v452.0.0.50.64-p0.0.16",
         "microg": false,
         "patchesRepo": "SysAdminDoc/HushThreads",
         "patchesVersion": "0.0.16",
         "patchCount": 17,
         "files": {
           "arm64-v8a": {
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/threads-v452.0.0.50.64-p0.0.16/threads-452.0.0.50.64-arm64-v8a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/threads-v452.0.0.50.64-p0.0.16/threads-452.0.0.50.64-arm64-v8a.apk",
             "size": 149513967,
             "sha256": "971abe9b16cd50a7c3215375a1a64ddc59f48092f0ca2c2c9460887ff75c0376"
           },
           "armeabi-v7a": {
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/threads-v452.0.0.50.64-p0.0.16/threads-452.0.0.50.64-armeabi-v7a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/threads-v452.0.0.50.64-p0.0.16/threads-452.0.0.50.64-armeabi-v7a.apk",
             "size": 137436722,
             "sha256": "6a52c7a13ebd1307b89aaba25940578843a19156ede5b0b46e91c72191fe4d01"
           }
@@ -1070,19 +1070,19 @@
         "versionName": "13.1.0",
         "build": "telegram-v13.1.0-p0.0.20",
         "releasedAt": "2026-10-24T05:06:27Z",
-        "releaseUrl": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/tag/telegram-v13.1.0-p0.0.20",
+        "releaseUrl": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/tag/telegram-v13.1.0-p0.0.20",
         "microg": false,
         "patchesRepo": "SysAdminDoc/HushTelegram",
         "patchesVersion": "0.0.20",
         "patchCount": 63,
         "files": {
           "arm64-v8a": {
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/telegram-v13.1.0-p0.0.20/telegram-13.1.0-arm64-v8a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/telegram-v13.1.0-p0.0.20/telegram-13.1.0-arm64-v8a.apk",
             "size": 41814029,
             "sha256": "49802bb023bb68bdf4ffa522c4a5e3cf84bd8e5cdfca3606b31894cbd0c2f244"
           },
           "armeabi-v7a": {
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/telegram-v13.1.0-p0.0.20/telegram-13.1.0-armeabi-v7a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/telegram-v13.1.0-p0.0.20/telegram-13.1.0-armeabi-v7a.apk",
             "size": 40358500,
             "sha256": "b30c66d1eb83b4ed0050fbcec6d883e2efe32d0dcb5481fe160dec07d38259b9"
           }
@@ -1099,19 +1099,19 @@
         "versionName": "47.4.3",
         "build": "tiktok-v47.4.3-p2.8.0",
         "releasedAt": "2026-10-24T05:08:18Z",
-        "releaseUrl": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/tag/tiktok-v47.4.3-p2.8.0",
+        "releaseUrl": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/tag/tiktok-v47.4.3-p2.8.0",
         "microg": false,
         "patchesRepo": "kveld9/kveld-morphe-patches",
         "patchesVersion": "2.8.0",
         "patchCount": 26,
         "files": {
           "arm64-v8a": {
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/tiktok-v47.4.3-p2.8.0/tiktok-47.4.3-arm64-v8a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/tiktok-v47.4.3-p2.8.0/tiktok-47.4.3-arm64-v8a.apk",
             "size": 308460775,
             "sha256": "b17ab6a9eca4332bb52c2646fdefc59b15bc5e55bc6e04fe401c0637cafcc036"
           },
           "armeabi-v7a": {
-            "url": "https://github.com/iamwaqargulzar/auto-murph-apk-builds/releases/download/tiktok-v47.4.3-p2.8.0/tiktok-47.4.3-armeabi-v7a.apk",
+            "url": "https://github.com/iamwaqargulzar/auto-morphe-apk-builds/releases/download/tiktok-v47.4.3-p2.8.0/tiktok-47.4.3-armeabi-v7a.apk",
             "size": 304610782,
             "sha256": "1bf8e0e2477378ea8b57d8b6e5af3f9cd6f1881bcb3a0161003e005f3697fb6e"
           }

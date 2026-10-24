@@ -35,7 +35,7 @@ async function signingFromEnv(): Promise<Signing> {
     storePassword: KEYSTORE_PASSWORD,
     alias: KEY_ALIAS,
     keyPassword: KEY_PASSWORD,
-    signer: process.env.SIGNER_NAME ?? "Auto Murph APK Builds",
+    signer: process.env.SIGNER_NAME ?? "Auto Morphe APK Builds",
   };
 }
 

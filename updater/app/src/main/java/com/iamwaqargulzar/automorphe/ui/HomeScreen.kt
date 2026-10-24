@@ -1,4 +1,4 @@
-package com.iamwaqargulzar.automurph.ui
+package com.iamwaqargulzar.automorphe.ui
 
 import android.content.Intent
 import android.net.Uri
@@ -79,8 +79,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.iamwaqargulzar.automurph.data.AppEntry
-import com.iamwaqargulzar.automurph.data.Status
+import com.iamwaqargulzar.automorphe.data.AppEntry
+import com.iamwaqargulzar.automorphe.data.Status
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -136,7 +136,7 @@ fun HomeScreen(vm: MainViewModel) {
                         Notice(
                             icon = Icons.Rounded.Security,
                             title = "Allow installs",
-                            text = "To install and update apps, allow Auto Murph to install unknown apps.",
+                            text = "To install and update apps, allow Auto Morphe to install unknown apps.",
                             action = "Open settings",
                         ) {
                             context.startActivity(
@@ -145,12 +145,22 @@ fun HomeScreen(vm: MainViewModel) {
                         }
                     }
                 }
+                if (state.oldAppInstalled) {
+                    item {
+                        Notice(
+                            icon = Icons.Rounded.SystemUpdate,
+                            title = "Remove the old Auto Murph",
+                            text = "Auto Murph is now Auto Morphe. Uninstall the old app; your patched apps stay installed.",
+                            action = "Uninstall",
+                        ) { context.startActivity(vm.uninstallIntent(OLD_PACKAGE)) }
+                    }
+                }
                 if (state.selfUpdate) {
                     item {
                         val v = state.feed?.updater?.versionName.orEmpty()
                         Notice(
                             icon = Icons.Rounded.SystemUpdate,
-                            title = "Auto Murph $v is available",
+                            title = "Auto Morphe $v is available",
                             text = "Update the updater itself for the latest fixes.",
                             action = if (state.selfTask == null) "Update" else null,
                             progress = state.selfTask,
@@ -228,7 +238,7 @@ private fun Hero(apps: Int, installed: Int, updates: Int, onUpdateAll: () -> Uni
         Column {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {
-                    Text("Auto Murph", color = Color.White, fontSize = 30.sp, fontWeight = FontWeight.Black)
+                    Text("Auto Morphe", color = Color.White, fontSize = 30.sp, fontWeight = FontWeight.Black)
                     Text("Patched apps, kept up to date", color = Color.White.copy(alpha = 0.85f))
                 }
                 IconButton(onClick = onSettings) {

@@ -1,7 +1,7 @@
-package com.iamwaqargulzar.automurph.data
+package com.iamwaqargulzar.automorphe.data
 
 import android.content.Context
-import com.iamwaqargulzar.automurph.BuildConfig
+import com.iamwaqargulzar.automorphe.BuildConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerialName
@@ -79,7 +79,7 @@ object FeedClient {
             val conn = URL(BuildConfig.FEED_URL).openConnection() as HttpURLConnection
             conn.connectTimeout = 15_000
             conn.readTimeout = 20_000
-            conn.setRequestProperty("User-Agent", "AutoMurph/${BuildConfig.VERSION_NAME}")
+            conn.setRequestProperty("User-Agent", "AutoMorphe/${BuildConfig.VERSION_NAME}")
             conn.setRequestProperty("Cache-Control", "no-cache")
             try {
                 if (conn.responseCode != 200) error("Feed returned HTTP ${conn.responseCode}")

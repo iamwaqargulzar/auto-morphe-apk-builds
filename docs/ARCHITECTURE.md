@@ -139,7 +139,7 @@ The portal generates one deep-link button per app and one bulk `obtainium.json`.
 
 ## 11. Open decisions
 
-- Repo: `iamwaqargulzar/auto-murph-apk-builds` (decided).
+- Repo: `iamwaqargulzar/auto-morphe-apk-builds` (decided).
 - Build schedule (daily vs every 2 days; with incremental builds daily is fine).
 - Notifications: Telegram, Discord, or none.
 - Stack: TypeScript + Astro recommended (see STACK.md), pending confirmation.

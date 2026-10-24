@@ -1,4 +1,4 @@
-package com.iamwaqargulzar.automurph.data
+package com.iamwaqargulzar.automorphe.data
 
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager

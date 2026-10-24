@@ -1,4 +1,4 @@
-package com.iamwaqargulzar.automurph.ui
+package com.iamwaqargulzar.automorphe.ui
 
 import android.content.Context
 import android.graphics.Bitmap

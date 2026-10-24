@@ -1,4 +1,4 @@
-package com.iamwaqargulzar.automurph.ui
+package com.iamwaqargulzar.automorphe.ui
 
 import android.Manifest
 import android.os.Build
@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
             notificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
         setContent {
-            AutoMurphTheme { HomeScreen(vm) }
+            AutoMorpheTheme { HomeScreen(vm) }
         }
     }
 

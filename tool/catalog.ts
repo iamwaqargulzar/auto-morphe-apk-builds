@@ -91,7 +91,7 @@ async function gh<T>(path: string): Promise<T> {
   const res = await fetch(`https://api.github.com${path}`, {
     headers: {
       Accept: "application/vnd.github+json",
-      "User-Agent": "auto-murph-apk-builds",
+      "User-Agent": "auto-morphe-apk-builds",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
   });
@@ -145,7 +145,7 @@ async function fetchManifest(r: GhRelease): Promise<BuildManifest | null> {
   const asset = r.assets.find((a) => a.name === "build.json");
   if (!asset) return null;
   try {
-    const res = await fetch(asset.browser_download_url, { headers: { "User-Agent": "auto-murph-apk-builds" } });
+    const res = await fetch(asset.browser_download_url, { headers: { "User-Agent": "auto-morphe-apk-builds" } });
     return res.ok ? ((await res.json()) as BuildManifest) : null;
   } catch {
     return null;
@@ -236,7 +236,7 @@ async function updaterRelease(releases: GhRelease[]): Promise<UpdaterRelease | n
   const meta = r?.assets.find((a) => a.name === "updater.json");
   const apk = r?.assets.find((a) => a.name.endsWith(".apk"));
   if (!r || !meta || !apk) return null;
-  const res = await fetch(meta.browser_download_url, { headers: { "User-Agent": "auto-murph-apk-builds" } });
+  const res = await fetch(meta.browser_download_url, { headers: { "User-Agent": "auto-morphe-apk-builds" } });
   if (!res.ok) return null;
   const info = (await res.json()) as { versionName: string; versionCode: number; sha256: string };
   return { ...info, url: apk.browser_download_url, size: apk.size, releasedAt: r.published_at, releaseUrl: r.html_url };
