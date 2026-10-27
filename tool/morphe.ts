@@ -1,8 +1,8 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { CLI_ASSET, CLI_REPO, ROOT, type App, type Arch, type Source } from "./config.ts";
+import { CLI_ASSET, CLI_REPO, PROJECT, ROOT, type App, type Arch, type Source } from "./config.ts";
 import { downloadAsset, latestRelease, pickAsset } from "./github.ts";
-import { compareVersions, run } from "./util.ts";
+import { compareVersions, log, run, runOk } from "./util.ts";
 
 const CACHE = join(ROOT, ".cache", "tools");
 const java = process.env.JAVA_BIN ?? (process.env.JAVA_HOME ? join(process.env.JAVA_HOME, "bin", "java") : "java");
@@ -14,24 +14,52 @@ export interface Tools {
   patchesVersion: string;
   patchesUrl: string;
   patchesNotes: string;
+  // Bundles from the app's extraSources, applied on top.
+  extras: Bundle[];
 }
 
-export async function fetchTools(source: Source): Promise<Tools> {
-  const [cliRel, patchRel] = await Promise.all([latestRelease(CLI_REPO), latestRelease(source.patches.repo)]);
+export interface Bundle {
+  source: Source;
+  file: string;
+  version: string;
+  url: string;
+  notes: string;
+}
+
+export async function fetchTools(source: Source, extraSources: Source[] = []): Promise<Tools> {
+  const cliRel = await latestRelease(CLI_REPO);
   const cliAsset = pickAsset(cliRel, CLI_ASSET);
-  const patchAsset = pickAsset(patchRel, new RegExp(source.patches.asset));
-  const [cliJar, patches] = await Promise.all([
-    downloadAsset(cliAsset, join(CACHE, cliAsset.name)),
-    downloadAsset(patchAsset, join(CACHE, source.id, patchAsset.name)),
-  ]);
+  const cliJar = await downloadAsset(cliAsset, join(CACHE, cliAsset.name));
+  const main = await fetchBundle(source, cliJar);
+  const extras: Bundle[] = [];
+  for (const extra of extraSources) extras.push(await fetchBundle(extra, cliJar));
   return {
     cliJar,
     cliVersion: cliRel.tag_name.replace(/^v/, ""),
-    patches,
-    patchesVersion: patchRel.tag_name.replace(/^v/, ""),
-    patchesUrl: patchRel.html_url,
-    patchesNotes: patchRel.body ?? "",
+    patches: main.file,
+    patchesVersion: main.version,
+    patchesUrl: main.url,
+    patchesNotes: main.notes,
+    extras,
   };
+}
+
+/** Latest release of a patch repo, or a local Gradle project built against the CLI jar. */
+async function fetchBundle(source: Source, cliJar: string): Promise<Bundle> {
+  if ("path" in source.patches) {
+    const dir = join(ROOT, source.patches.path);
+    const props = await readFile(join(dir, "gradle.properties"), "utf8");
+    const version = props.match(/^version\s*=\s*(\S+)/m)?.[1];
+    if (!version) throw new Error(`${dir}/gradle.properties has no version`);
+    log(`Building ${source.name} ${version}`);
+    await runOk(join(dir, "gradlew"), ["-p", dir, "--no-daemon", "-q", "build", `-PmorpheJar=${cliJar}`]);
+    const url = `https://github.com/${PROJECT.repo}/tree/main/${source.patches.path}`;
+    return { source, file: join(dir, "build", "libs", `patches-${version}.mpp`), version, url, notes: "" };
+  }
+  const rel = await latestRelease(source.patches.repo);
+  const asset = pickAsset(rel, new RegExp(source.patches.asset));
+  const file = await downloadAsset(asset, join(CACHE, source.id, asset.name));
+  return { source, file, version: rel.tag_name.replace(/^v/, ""), url: rel.html_url, notes: rel.body ?? "" };
 }
 
 // Morphe keeps its data folder next to the jar, so it stays inside .cache.
@@ -56,8 +84,9 @@ export async function supportedVersions(tools: Tools, pkg: string, experimental 
   const res = await morphe(tools, ["list-versions", "--patches", tools.patches, "-f", pkg, ...(experimental ? ["-x"] : [])]);
   if (res.code !== 0) throw new Error(`list-versions failed:\n${res.stderr || res.stdout}`);
   // Lines look like "\t452.1.0.53.64 [versionCodes: ARM64_V8A=385811006] (109 patches)".
+  // Some version names have spaces (Discord: "343.12 - Stable").
   const out: SupportedVersion[] = [];
-  for (const m of res.stdout.matchAll(/^\s+(\S+)(?: \[versionCodes: ([^\]]+)\])? \((\d+) patch(?:es)?\)/gm)) {
+  for (const m of res.stdout.matchAll(/^\s+(\S.*?)(?: \[versionCodes: ([^\]]+)\])? \((\d+) patch(?:es)?\)$/gm)) {
     const codes: Partial<Record<Arch, number>> = {};
     for (const pair of (m[2] ?? "").split(/,\s*/)) {
       const [abi, code] = pair.split("=");
@@ -79,8 +108,9 @@ export interface PatchResult {
 
 export async function patch(tools: Tools, app: App, arch: Arch, input: string, output: string, signing: Signing): Promise<PatchResult> {
   const resultFile = `${output}.result.json`;
-  const args = ["patch", "-p", tools.patches];
+  const args = ["patch", "-p", tools.patches, ...tools.extras.flatMap((e) => ["-p", e.file])];
   if (app.exclusive) args.push("--exclusive");
+  if (app.force) args.push("-f");
   for (const name of app.include) args.push("-e", name);
   for (const name of app.exclude) args.push("-d", name);
   args.push("--striplibs", arch);

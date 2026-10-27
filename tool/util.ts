@@ -38,6 +38,9 @@ export async function runOk(cmd: string, args: string[], opts: { quiet?: boolean
   return res;
 }
 
+/** A version name safe for tags and file names ("343.12 - Stable" → "343.12-Stable"). */
+export const versionSlug = (version: string) => version.replace(/\s+/g, "");
+
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 /**

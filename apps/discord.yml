@@ -1,0 +1,11 @@
+name: Discord
+package: com.discord
+source: jrddupont
+enabled: true
+order: 13
+version: auto
+arches: [arm64-v8a, armeabi-v7a]
+include: []
+exclude: []
+about: >-
+  Discord without the quest promo banner or the gift button.

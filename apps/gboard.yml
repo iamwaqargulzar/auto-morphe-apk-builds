@@ -1,0 +1,17 @@
+name: Gboard
+package: com.google.android.inputmethod.latin
+source: gboard
+enabled: true
+order: 14
+version: auto
+# The patches target the arm64 build only.
+arches: [arm64-v8a]
+include: []
+# Both run a network server on the phone from inside the keyboard; left out to be safe.
+exclude:
+  - "FTP Server"
+  - "Web Clipboard"
+about: >-
+  Gboard with dozens of extras: custom themes and symbols, a cursor trackpad,
+  clipboard and voice typing upgrades, a calculator and more. Installs next to
+  the system Gboard as "GboardWu"; switch to it in keyboard settings.

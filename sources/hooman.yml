@@ -1,0 +1,5 @@
+# Twitch patches.
+name: Hooman
+patches:
+  repo: arandomhooman/hoomans-morphe-patches
+  asset: '^patches-.*\.mpp$'

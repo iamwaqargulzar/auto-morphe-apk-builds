@@ -1,0 +1,5 @@
+# Discord patches.
+name: jrddupont
+patches:
+  repo: jrddupont/discord-patches
+  asset: '^patches-.*\.mpp$'

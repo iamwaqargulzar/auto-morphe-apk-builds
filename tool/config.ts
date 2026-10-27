@@ -22,18 +22,30 @@ export type Arch = (typeof ARCHES)[number];
 
 const SourceSchema = z.object({
   name: z.string(),
-  patches: z.object({
-    repo: z.string().regex(/^[\w.-]+\/[\w.-]+$/),
-    asset: z.string(),
-  }),
+  patches: z.union([
+    // Latest GitHub release of a patch repo.
+    z.object({
+      repo: z.string().regex(/^[\w.-]+\/[\w.-]+$/),
+      asset: z.string(),
+    }),
+    // A Gradle project in this repo (patches/), built before patching.
+    z.object({ path: z.string() }),
+  ]),
 });
 
 const AppSchema = z.object({
   name: z.string(),
   package: z.string().regex(/^[a-zA-Z][\w]*(\.[\w]+)+$/),
   source: z.string(),
+  // More patch bundles applied on top of `source` (e.g. our own Auto Morphe patches).
+  extraSources: z.array(z.string()).default([]),
   enabled: z.boolean().default(true),
+  // "auto": best version the patches support; "latest": Google Play's current one
+  // (with `force`, for patches that lag behind Play); or an exact version.
   version: z.string().default("auto"),
+  // Patch even if the patches don't list the version (Morphe CLI -f). Patches whose
+  // code moved fail and are reported, the rest still apply.
+  force: z.boolean().default(false),
   // Also consider versions the patch authors mark experimental.
   experimental: z.boolean().default(false),
   // One APK per CPU type; the first one is required, the rest are best effort.
@@ -54,6 +66,11 @@ const AppSchema = z.object({
 });
 
 export type Source = z.infer<typeof SourceSchema> & { id: string };
+
+/** The repo a source's patches come from (this repo for local ones). */
+export function sourceRepo(source: Source): string {
+  return "repo" in source.patches ? source.patches.repo : PROJECT.repo;
+}
 export type App = z.infer<typeof AppSchema> & { id: string };
 
 async function loadYaml<T>(file: string, schema: z.ZodType<T>): Promise<T> {

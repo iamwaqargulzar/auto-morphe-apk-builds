@@ -60,7 +60,7 @@ export async function playLatest(app: App, arch: Arch): Promise<{ version: strin
   const profile = PROFILES[arch][0];
   return retry("Google Play info", 4, 20_000, async () => {
     const res = await goopdl(["info", app.package, "--arch", DEVICE[arch], ...(profile ? ["--profile", profile] : [])], arch, profile);
-    const m = res.stdout.match(/Version\s*│\s*(\S+)\s+\((\d+)\)/);
+    const m = res.stdout.match(/Version\s*│\s*(\S.*?)\s+\((\d+)\)\s*│/);
     if (!m) throw new Error(`Could not read version from goopdl info output`);
     return { version: m[1]!, code: Number(m[2]) };
   }, AUTH_FATAL);

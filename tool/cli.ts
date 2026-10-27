@@ -1,12 +1,12 @@
 import { mkdir, rename, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { parseArgs } from "node:util";
-import { ROOT, loadApp, loadApps, loadSource, type App, type Arch } from "./config.ts";
+import { ROOT, loadApp, loadApps, loadSource, sourceRepo, type App, type Arch } from "./config.ts";
 import { fetchTools, patch, supportedVersions, type Signing, type SupportedVersion, type Tools } from "./morphe.ts";
 import { writeCatalog } from "./catalog.ts";
-import { NotOnPlayError, downloadFromPlay } from "./play.ts";
+import { NotOnPlayError, downloadFromPlay, playLatest } from "./play.ts";
 import { deleteRelease, publishRelease, releaseExists, releaseTag, type Build } from "./release.ts";
-import { log, runOk } from "./util.ts";
+import { log, runOk, versionSlug } from "./util.ts";
 import { mergeVersionCodes } from "./versioncodes.ts";
 
 const USAGE = `Usage:
@@ -40,6 +40,11 @@ async function signingFromEnv(): Promise<Signing> {
 }
 
 async function resolveVersion(app: App, tools: Tools): Promise<SupportedVersion> {
+  if (app.version === "latest") {
+    const latest = await playLatest(app, app.arches[0]!);
+    log(`Google Play's current version: ${latest.version}`);
+    return { version: latest.version, patches: 0, codes: { [app.arches[0]!]: latest.code } };
+  }
   if (app.version !== "auto") {
     const listed = (await supportedVersions(tools, app.package, true)).find((v) => v.version === app.version);
     return listed ?? { version: app.version, patches: 0, codes: {} };
@@ -58,8 +63,8 @@ async function build(appId: string, opts: { force: boolean; release: boolean; re
   if (opts.release && !repo) throw new Error("No target repo: pass --repo or set GITHUB_REPOSITORY");
 
   const signing = await signingFromEnv();
-  const tools = await fetchTools(source);
-  log(`Patcher ${tools.cliVersion}, patches ${source.patches.repo}@${tools.patchesVersion}`);
+  const tools = await fetchTools(source, await Promise.all(app.extraSources.map(loadSource)));
+  log(`Patcher ${tools.cliVersion}, patches ${[`${sourceRepo(source)}@${tools.patchesVersion}`, ...tools.extras.map((e) => `${e.source.name}@${e.version}`)].join(" + ")}`);
 
   const target = await resolveVersion(app, tools);
   const version = target.version;
@@ -97,7 +102,7 @@ async function build(appId: string, opts: { force: boolean; release: boolean; re
   }
 
   if (opts.release && repo) {
-    const url = await publishRelease({ repo, app, version, tools, builds, workDir: workRoot, patchesRepo: source.patches.repo });
+    const url = await publishRelease({ repo, app, version, tools, builds, workDir: workRoot, patchesRepo: sourceRepo(source) });
     log(`Released: ${url}`);
   }
 }
@@ -138,7 +143,7 @@ async function buildArch(
   }
   log(`Patched ${arch}: ${result.appliedPatches.length} applied, ${result.failedPatches.length} failed`);
 
-  const apk = join(outDir, `${app.id}-${version}-${arch}.apk`);
+  const apk = join(outDir, `${app.id}-${versionSlug(version)}-${arch}.apk`);
   await rename(patched, apk);
   log(`Output: ${apk}`);
   return { arch, apk, result };

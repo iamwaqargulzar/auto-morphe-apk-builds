@@ -2,9 +2,18 @@
   "com.brave.browser": {
     "1.97.59": 429705904
   },
+  "com.discord": {
+    "343.12 - Stable": 343012,
+    "350.8 - Stable": 350008,
+    "350.8 - Stable@armeabi-v7a": 350008
+  },
   "com.google.android.apps.youtube.music": {
     "9.42.52": 94252240,
     "9.42.52@armeabi-v7a": 94252230
+  },
+  "com.google.android.inputmethod.latin": {
+    "18.4.4.985164140-release-arm64-v8a": 176027246,
+    "18.5.4.993608717-release-arm64-v8a": 176049702
   },
   "com.google.android.youtube": {
     "20.26.40": 1555432896,
@@ -53,5 +62,10 @@
   "org.telegram.messenger": {
     "13.1.0": 72291,
     "13.1.1@armeabi-v7a": 72371
+  },
+  "tv.twitch.android.app": {
+    "31.7.0": 3107006,
+    "31.7.0@armeabi-v7a": 3107006,
+    "31.8.0": 3108006
   }
 }

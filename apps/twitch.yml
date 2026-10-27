@@ -1,0 +1,16 @@
+name: Twitch
+package: tv.twitch.android.app
+source: hooman
+enabled: true
+order: 12
+# The patches list only 30.7.2, which Google Play no longer serves. On Play's
+# current version, live ads, login, notifications and deleted messages still
+# patch; display ads, 7TV/BTTV emotes and channel points don't (yet).
+version: latest
+force: true
+arches: [arm64-v8a, armeabi-v7a]
+include: []
+exclude: []
+about: >-
+  Twitch without live ads, with deleted chat messages shown and fixes for
+  login and notifications.

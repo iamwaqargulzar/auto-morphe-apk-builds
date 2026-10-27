@@ -1,6 +1,6 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { PROJECT, ROOT, loadApps, loadSource, type App, type Arch } from "./config.ts";
+import { PROJECT, ROOT, loadApps, loadSource, sourceRepo, type App, type Arch } from "./config.ts";
 import type { BuildManifest } from "./release.ts";
 import { log } from "./util.ts";
 
@@ -179,6 +179,8 @@ async function enrich(release: CatalogRelease, gh: GhRelease): Promise<void> {
   const manifest = await fetchManifest(gh);
   if (!manifest) return;
   release.installedPackage = manifest.package;
+  // The tag holds a slug ("343.12-Stable"); the updater compares the real name.
+  release.version = manifest.versionName;
   release.versionCode = manifest.versionCode;
   release.applied = manifest.patches.applied;
   release.failed = manifest.patches.failed;
@@ -261,7 +263,7 @@ export async function buildCatalog(): Promise<Catalog> {
       about: app.about,
       microg: app.microg,
       icon: await playIcon(app.id, app.package),
-      source: { name: source.name, repo: source.patches.repo },
+      source: { name: source.name, repo: sourceRepo(source) },
       arches: app.arches,
       latest: mine[0] ?? null,
       older: mine.slice(1, 6),

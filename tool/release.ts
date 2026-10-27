@@ -1,9 +1,9 @@
 import { stat, writeFile } from "node:fs/promises";
 import { basename, join } from "node:path";
 import { apkInfo, sha256 } from "./apkinfo.ts";
-import { ROOT, type App, type Arch } from "./config.ts";
+import { ROOT, sourceRepo, type App, type Arch } from "./config.ts";
 import type { PatchResult, Tools } from "./morphe.ts";
-import { log, run, runOk } from "./util.ts";
+import { log, run, runOk, versionSlug } from "./util.ts";
 
 export interface Build {
   arch: Arch;
@@ -27,7 +27,7 @@ export interface BuildManifest {
   versionName: string;
   versionCode: number;
   builtAt: string;
-  patches: { repo: string; version: string; applied: string[]; failed: string[] };
+  patches: { repo: string; version: string; applied: string[]; failed: string[]; extras?: { repo: string; name: string; version: string }[] };
   files: Partial<Record<Arch, { name: string; size: number; sha256: string }>>;
 }
 
@@ -53,13 +53,15 @@ async function buildManifest(app: App, tag: string, tools: Tools, builds: Build[
       version: tools.patchesVersion,
       applied: result.appliedPatches,
       failed: result.failedPatches.map((p) => p.name ?? p.patch ?? "unknown"),
+      extras: tools.extras.map((e) => ({ repo: sourceRepo(e.source), name: e.source.name, version: e.version })),
     },
     files,
   };
 }
 
 export function releaseTag(app: App, version: string, tools: Tools): string {
-  return `${app.id}-v${version}-p${tools.patchesVersion}`;
+  // Extra bundles join the tag so a new version of them makes a new release.
+  return `${app.id}-v${versionSlug(version)}-p${tools.patchesVersion}${tools.extras.map((e) => `-${e.source.id}${e.version}`).join("")}`;
 }
 
 export async function releaseExists(repo: string, tag: string): Promise<boolean> {
@@ -83,6 +85,7 @@ function notes(app: App, version: string, tools: Tools, builds: Build[]): string
     `|---|---|`,
     `| CPU types | ${builds.map((b) => `\`${b.arch}\``).join(", ")} |`,
     `| Patches | [${tools.patchesVersion}](${tools.patchesUrl}) |`,
+    ...tools.extras.map((e) => `| ${e.source.name} | [${e.version}](${e.url}) |`),
     `| Patcher | Morphe CLI ${tools.cliVersion} |`,
     `| Applied | ${result.appliedPatches.length} |`,
     `| Failed | ${result.failedPatches.length} |`,

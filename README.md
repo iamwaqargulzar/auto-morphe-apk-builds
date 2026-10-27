@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/tooling-MIT-blue)](LICENSE)
 
 **Auto Morphe APK Builds** publishes free, non-root, patched Android apps (**YouTube, YouTube Music, Reddit, X,
-Instagram, Threads, Telegram, TikTok, Brave**, and Pakistan's **Simosa (Jazz)** and **My Zong**) and keeps them up to date with its own Android app,
+Instagram, Threads, Telegram, TikTok, Brave, Twitch, Discord, Gboard**, and Pakistan's **Simosa (Jazz)** and **My Zong**) and keeps them up to date with its own Android app,
 **Auto Morphe**. Every build starts from the official app on Google Play, applies open-source patches (no ads, less
 clutter, privacy fixes, extra settings), is signed with one stable key and is published by GitHub Actions in public.
 
@@ -42,6 +42,9 @@ clutter, privacy fixes, extra settings), is signed with one stable key and is pu
 | [Brave](https://apk.iamwaqargulzar.com/apps/brave/) | No sponsored start page or promo notifications, analytics off, less battery drain | [kveld9/kveld-morphe-patches](https://github.com/kveld9/kveld-morphe-patches) | Builds as soon as Google Play releases the version the patches support |
 | [Simosa (Jazz World)](https://apk.iamwaqargulzar.com/apps/simosa/) | No ads or trackers, no Shop/Social+/Lifestyle tabs, daily check-in claimed for you | [totsiaw/proxma-patches](https://github.com/totsiaw/proxma-patches) | Uninstall the Play Store version first |
 | [My Zong](https://apk.iamwaqargulzar.com/apps/my-zong/) | No ads or trackers, daily reward without watching an ad | [totsiaw/proxma-patches](https://github.com/totsiaw/proxma-patches) | Uninstall the Play Store version first; built from an older version the patches support |
+| [Twitch](https://apk.iamwaqargulzar.com/apps/twitch/) | No live ads, deleted chat messages shown, login and notification fixes | [arandomhooman/hoomans-morphe-patches](https://github.com/arandomhooman/hoomans-morphe-patches) | Uninstall the Play Store version first; built from Google Play's current version, which the patches don't list yet, so display-ad, emote and channel-point patches are skipped |
+| [Discord](https://apk.iamwaqargulzar.com/apps/discord/) | No quest promo banner or gift button | [jrddupont/discord-patches](https://github.com/jrddupont/discord-patches) | Uninstall the Play Store version first; built from an older version the patches support |
+| [Gboard](https://apk.iamwaqargulzar.com/apps/gboard/) | Custom themes and symbols, cursor trackpad, clipboard and voice typing upgrades, calculator | [jasonwu1994/gboard-patches](https://github.com/jasonwu1994/gboard-patches) | 64-bit phones only; installs next to the system Gboard as "GboardWu" (pick it in keyboard settings). FTP server and Web Clipboard patches are left out |
 
 Patches that unlock **paid subscriptions** are left out (for example X Premium features and TikTok's watermark remover).
 Current versions, patch lists, checksums and file sizes are on the [website](https://apk.iamwaqargulzar.com) and in
@@ -225,5 +228,6 @@ app name and Play Store link. Apps are added when a maintained patch set support
 - Released APKs contain code from third-party patches licensed under GPLv3; every release includes their [NOTICE](NOTICE).
   "Morphe" is the patch project's name; this project is independent of it.
 - YouTube and Google Play are trademarks of Google LLC; Instagram and Threads of Meta Platforms, Inc.; X of X Corp.;
-  Reddit of Reddit, Inc.; Telegram of Telegram FZ-LLC; TikTok of ByteDance Ltd.; Brave of Brave Software, Inc.
+  Reddit of Reddit, Inc.; Telegram of Telegram FZ-LLC; TikTok of ByteDance Ltd.; Brave of Brave Software, Inc.;
+  Twitch of Twitch Interactive, Inc.; Discord of Discord Inc.
   This project is not affiliated with or endorsed by any of them.

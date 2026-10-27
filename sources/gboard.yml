@@ -1,0 +1,5 @@
+# Gboard patches (installs next to the system Gboard under its own package).
+name: Gboard Patches
+patches:
+  repo: jasonwu1994/gboard-patches
+  asset: '^patches-.*\.mpp$'
