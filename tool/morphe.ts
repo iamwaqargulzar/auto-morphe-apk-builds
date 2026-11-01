@@ -108,11 +108,14 @@ export interface PatchResult {
 
 export async function patch(tools: Tools, app: App, arch: Arch, input: string, output: string, signing: Signing): Promise<PatchResult> {
   const resultFile = `${output}.result.json`;
-  const args = ["patch", "-p", tools.patches, ...tools.extras.flatMap((e) => ["-p", e.file])];
+  // -e/-d/--exclusive apply to the -p bundle named just before them, so the
+  // app's own include/exclude lists must follow its main bundle, not the extras.
+  const args = ["patch", "-p", tools.patches];
   if (app.exclusive) args.push("--exclusive");
-  if (app.force) args.push("-f");
   for (const name of app.include) args.push("-e", name);
   for (const name of app.exclude) args.push("-d", name);
+  for (const extra of tools.extras) args.push("-p", extra.file);
+  if (app.force) args.push("-f");
   args.push("--striplibs", arch);
   args.push(
     "--continue-on-error",

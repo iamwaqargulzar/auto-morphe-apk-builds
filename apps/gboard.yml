@@ -1,6 +1,8 @@
 name: Gboard
 package: com.google.android.inputmethod.latin
 source: gboard
+# Our own bundle: keeps Gboard's debug bridge private (see patches/).
+extraSources: [automorphe]
 enabled: true
 order: 14
 version: auto

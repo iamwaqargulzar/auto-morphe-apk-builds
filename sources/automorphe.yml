@@ -1,0 +1,4 @@
+# Our own patches, built from patches/ in this repo (e.g. Telegram API credentials from Auto Morphe).
+name: Auto Morphe Patches
+patches:
+  path: patches
